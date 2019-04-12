@@ -2,7 +2,7 @@
     <div class="classify">
       <Logo-Component></Logo-Component>
       <ul class="nav">
-        <li  v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="select===index?colorStyle:''">{{item.Name}}</li>
+        <li  v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="colorStyle(index)">{{item.Name}}</li>
       </ul>
       <div class="classGoods">
         <ul>
@@ -31,29 +31,31 @@
             ],
             list:[],
             select:1,
-            colorStyle:{
-              color:'#33647F'
-            }
           }
       },
       components:{LogoComponent,FootComponent},
-      created(){
+      mounted(){
+        this.select=parseInt(this.$route.query.id)
         //获取导航栏
-        // this.select=this.$route.query.id
         this.getNav()
-        if(this.$route.query.ID!==undefined ||this.getCookie('token')!==null)
+        if(this.$route.query.ID!==undefined ||this.$store.state.token!=='')
         {
           this.PriceStyle={
             textDecoration:'line-through'
           }
-          this.getGoodsToken(this.$route.query.ID,this.getCookie('token'))
-        }else if(this.getCookie('token')===null){
+          this.getGoodsToken(this.$route.query.ID,this.$store.state.token || localStorage.getItem('token'))
+        }else if(this.$store.state.token===''){
          this.getGoods(this.$route.query.ID)
         }else{
           this.$message("请重新登录")
         }
       },
       methods:{
+        colorStyle(index){
+         if(index===this.select){
+           return {color:'#33647F'}
+         }
+          },
           //获取导航栏
         getNav(){
           this.$http
@@ -129,10 +131,7 @@
             )
             .catch(
               function (error) {
-                this.$notify.error({
-                  title: "错误",
-                  message: "请通知后台",
-                });
+            this.$message("登录失效，请重新登录")
               }.bind(this)
             )
         },
@@ -142,7 +141,7 @@
           {
             this.$router.push('/')
           }else{
-             this.getGoodsToken(ID,this.getCookie('token'))
+             this.getGoodsToken(ID,this.$store.state.token || localStorage.getItem('token'))
             this.$router.push({path:'/classify',query:{id:index,ID:ID}})
           }
         }
@@ -155,11 +154,11 @@
   .nav{
     list-style: none;
     height:100px;
-     margin-left: 10%;
+    margin-left: 2%;
     margin-top: 0;
     li{
       float: left;
-      width:11%;
+      width:15%;
       height:100%;
       font-size: 2.5em;
       font-weight: bolder;
@@ -185,7 +184,7 @@
        float: left;
        width:20%;
        height:340px;
-       margin-left: 10%;
+       margin-left: 8%;
        margin-top: 2%;
        border-radius: 10px;
        background:rgba(255,255,255,1);
@@ -229,6 +228,7 @@
         li{
           width:18%;
           height:320px;
+          margin-left: 10%;
           img{
             height:200px;
           }
@@ -242,11 +242,6 @@
     }
   }
   @media only screen and (max-width: 1440px){
-    .nav {
-      li{
-        width:12%;
-      }
-    }
     .classGoods{
       ul{
         li{
@@ -275,11 +270,6 @@
     }
   }
   @media only screen and (max-width: 1280px){
-    .nav {
-      li{
-        width:14%;
-      }
-    }
     .classGoods{
       ul{
         li{

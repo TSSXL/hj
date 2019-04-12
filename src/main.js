@@ -7,6 +7,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import VueVideoPlayer from 'vue-video-player';
 import 'video.js/dist/video-js.css'
+import store from './store/index'
 
 import axios from 'axios'
 Vue.prototype.$http = axios;
@@ -46,5 +47,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })

@@ -2,7 +2,7 @@
     <div class="goodsInfo">
       <Logo-Component></Logo-Component>
       <ul class="nav">
-        <li v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="select===index?colorStyle:''">{{item.Name}}</li>
+        <li v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="ColorStyle(item.ID)">{{item.Name}}</li>
       </ul>
       <!--商品名称-->
       <div class="goodsMsg">
@@ -71,7 +71,6 @@
             navList:[
               {ID:"0",Name:"首页"}
             ],
-            select:0,
             colorStyle:{
               color:'#33647F'
             },
@@ -81,20 +80,26 @@
       components:{LogoComponent,FootComponent},
       created(){
         this.getNav()
-        if(this.getCookie('token')!==null)
+        if(this.$store.state.token!=='' ||localStorage.getItem('token')!=='')
         {
           this.isShow=true
-         this.getGoodsInfoToken(this.$route.query.ID,this.getCookie('token'))
+         this.getGoodsInfoToken(this.$route.query.ID,this.$store.state.token || localStorage.getItem('token'))
           this.getTj(1,this.$route.query.ClassID,this.$route.query.ID)
         }else{
           this.getGoodsInfo(this.$route.query.ID)
         }
       },
       methods:{
+          ColorStyle(ID)
+          {
+            if(ID===this.$route.query.ClassID)
+            {
+              return {color:'#33647F'}
+            }
+          },
         //跳转到商品详情
         goods(ID,ClassID){
-          // this.$router.push({path:'/goodsInfo',query:{ID:ID,ClassID:ClassID}})
-          this.getGoodsInfoToken(ID,this.getCookie('token'))
+          this.getGoodsInfoToken(ID,this.$store.state.token || localStorage.getItem('token'))
           this.getTj(1,ClassID,ID)
         },
           //获取推荐商品
@@ -133,6 +138,7 @@
               function (response) {
               this.goodInfo=response.data.Result[0]
                 this.sImg=response.data.Result[0].image
+
               }.bind(this)
             )
             .catch(
@@ -155,7 +161,7 @@
             .then(
               function (response) {
                 this.goodInfo=response.data.Result[0]
-                this.sImg=response.data.Result[0].image
+                this.sImg=response.data.Result[0].image.slice(0,3)
               }.bind(this)
             )
             .catch(
@@ -194,7 +200,7 @@
             this.$http
               .get("/api/Shopping/ShoppingAdd",{
                 params:{
-                  token:this.getCookie('token'),
+                  token:this.$store.state.token || localStorage.getItem('token'),
                   ProName:this.goodInfo.Name,
                   Count:1
                 }
@@ -228,7 +234,6 @@
 
         },
         handle(index,ID){
-          this.select=index
           if(index===0)
           {
             this.$router.push('/')
@@ -245,11 +250,11 @@
     .nav{
       list-style: none;
       height:100px;
-      margin-left: 10%;
+      margin-left: 3.2%;
       margin-top: 0;
       li{
         float: left;
-        width:11%;
+        width:15%;
         height:100%;
         font-size: 2.5em;
         font-weight: bolder;
@@ -458,11 +463,6 @@
       }
     }
     @media only screen and (max-width: 1440px){
-      .nav {
-        li{
-          width:12%;
-        }
-      }
       .goodsMsg{
         .left{
           width:30%;

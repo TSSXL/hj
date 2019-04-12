@@ -2,26 +2,29 @@
   <div class="mine">
     <Logo-Component></Logo-Component>
     <ul class="nav">
-      <li  v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="select===index?colorStyle:''">{{item.Name}}</li>
+      <li  v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" >{{item.Name}}</li>
     </ul>
     <div class="content">
       <p>个人中心</p>
     <div class="main">
       <div class="mainItem">
       <span>我的头像:</span>
-        <img src="../img/a.png" alt="">
+        <el-upload  class="avatar-uploader" :limit="1" :action="actionUser" :on-preview="handlePictureCardPreview"
+                   list-type="picture-card" :on-success="handleAvatarSuccess" >
+            <img :src="info.UserImage" alt="" style="height:100%;width:100%;border: none;">
+        </el-upload>
       </div>
       <div class="mainItem">
-        <span>用户名&nbsp;:</span>
-        <input type="text" >
+        <span>用户昵称:</span>
+        <input type="text" v-model="info.NickName" >
       </div>
       <div class="mainItem">
-        <span>账&nbsp;&nbsp;号:</span>
-        <span>15645456514</span>
+        <span>登录账号:</span>
+        <span>{{info.Account}}</span>
       </div>
       <div class="mainItem">
         <span>会员等级:</span>
-        <span>VIP5</span>
+        <span>VIP{{info.VipLv}}</span>
         <span style="color:#33647F;cursor: pointer" @click="Dialog">去认证</span>
       </div>
     </div>
@@ -41,8 +44,8 @@
           <el-input ></el-input>
         </el-form-item>
         <el-form-item label="营业执照:">
-          <el-upload v-model="form.Image" class="avatar-uploader" :limit="1" :action="action" :on-preview="handlePictureCardPreview"
-                     list-type="picture-card" :on-success="handleAvatarSuccess" >
+          <el-upload v-model="form.Image" class="avatar-uploader" :limit="1" :action="action" :on-preview="handlePictureCardPreviewU"
+                     list-type="picture-card" :on-success="handleAvatarSuccessU" >
             <i class="el-icon-plus"></i>
           </el-upload>
         </el-form-item>
@@ -72,17 +75,14 @@
     name: "people",
     data(){
       return{
+        actionUser:'',
+        info:{},
         action:'',
        form:{
          Image:''
        },
-        dialogImageUrl:'',
         dialogVisible:false,
         dialogVisibleTwo:false,
-        select:0,
-        colorStyle:{
-          color:'#33647F'
-        },
         navList:[
           {ID:"0",Name:"首页"}
         ],
@@ -91,14 +91,30 @@
     components:{LogoComponent,FootComponent},
     created(){
       this.getNav()
+      this.getInfo(this.$store.state.token || localStorage.getItem('token'))
     },
     methods:{
-      handleAvatarSuccess(response) {
-        this.form.Image = response.Result[0];
-        console.log(this.form.Image)
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
+      //获取个人信息
+      getInfo(token){
+        this.$http
+          .get("/api/Login/PersonnelInformation",{
+            params:{
+              token:token
+            }
+          })
+          .then(
+            function (response) {
+            this.info=response.data.Result
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.$notify.error({
+                title: "错误",
+                message: "获取个人信息出错",
+              });
+            }.bind(this)
+          )
       },
       //获取导航栏
       getNav(){
@@ -118,8 +134,8 @@
             }.bind(this)
           )
       },
+      //导航栏
       handle(index,ID){
-        this.select=index
         if(index===0)
         {
           this.$router.push('/')
@@ -127,30 +143,29 @@
           this.$router.push({path:'/classify',query:{id:index,ID:ID}})
         }
       },
+      //点击认证
       Dialog(){
       this.dialogVisible=true
       },
+      //弹框点击提交
       tj(){
         this.dialogVisible=false
        this.dialogVisibleTwo=true
       },
+      handlePictureCardPreview(file) {
+
+      },
       handleAvatarSuccess(res, file) {
         console.log(res.data.Result[0])
-        this.imageUrl = URL.createObjectURL(file.raw);
+        // this.imageUrl = URL.createObjectURL(file.raw);
       },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isPNG = file.type === 'image/png';
-        const isLt2M = file.size / 1024 / 1024 < 2;
+      handlePictureCardPreviewU(file) {
 
-        if (!isJPG && !isPNG) {
-          this.$message.error('上传头像图片只能是 JPG或PNG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
-        }
-        return isJPG && isPNG  && isLt2M;
-      }
+      },
+      handleAvatarSuccessU(res, file) {
+        console.log(res.data.Result[0])
+        // this.imageUrl = URL.createObjectURL(file.raw);
+      },
     }
   }
 </script>
@@ -161,11 +176,11 @@
     .nav{
       list-style: none;
       height:100px;
-      margin-left: 10%;
+      margin-left: 2%;
       margin-top: 0;
       li{
         float: left;
-        width:11%;
+        width:15%;
         height:100%;
         font-size: 2.5em;
         font-weight: bolder;
@@ -188,14 +203,14 @@
         color:#33647F;
         font-size: 2.5em;
         font-weight: bolder;
-        margin-left: -50%;
+        margin-left: -33%;
         margin-top: 5%;
         color:#33647F;
       }
       .main{
         width:50%;
         display: flex;
-        margin-left: 22%;
+        margin-left: 31%;
         flex-direction: column;
         padding-bottom: 80px;
         .mainItem{
@@ -233,13 +248,13 @@
         color:white;
       }
     }
-    @media only screen and (max-width: 1680px){
-      .content{
-      }
-    }
     @media only screen and (max-width: 1440px){
       .content{
+        p{
+          margin-left: -32%;
+        }
       .main{
+        margin-left: 30.8%;
         .mainItem{
           span{
             width:20%;
@@ -251,6 +266,20 @@
       }
         button{
           width:18%;
+        }
+      }
+    }
+    @media only screen and (max-width: 1280px){
+      .content{
+        .main{
+          margin-left: 30.5%;
+        }
+      }
+    }
+    @media only screen and (max-width: 1024px){
+      .content{
+        .main{
+          margin-left: 29.5%;
         }
       }
     }

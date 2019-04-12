@@ -23,6 +23,7 @@
 
 <script>
   import qs from 'qs'
+  import md5 from 'js-md5'
   export default {
     name: 'Login',
     data () {
@@ -72,16 +73,19 @@
             .post("/api/Login/ComLogin",
               qs.stringify({
                 Name: this.number,
-                Password: this.psd
+                Password: md5(this.psd)
               })
             )
             .then(
               function (response) {
-                if(response.data.Status===4002)
+                if(response.data.Status===1)
                 {
+                  //后台获取token存到本地和store中
+                  //存到local中是为了防止页面刷新state中数据变为undefined请求发不出去
+                  localStorage.setItem('token', response.data.Result)
+                  this.$store.state.token = response.data.Result
                   this.$message('登录成功')
                   this.$router.go(-1)
-                  this.setCookie('token',response.data.Result)
                 }else{
                   this.$message(response.data.Result)
                 }
@@ -106,7 +110,7 @@
       },
       //跳转到忘记密码页面
       gotoForget(){
-        this.$router.push('/forget')
+        this.$router.push('/for')
       },
       //跳转到注册页面
       goRegister(){
@@ -157,11 +161,12 @@
           border-bottom: 1px solid #A8A8AA;
         }
         img{
-          height:30px;
+          height:29px;
           width:24px;
           float: left;
           margin-left:14%;
           padding-bottom: 0;
+          margin-top: 5px;
         }
       }
       span:first-child{

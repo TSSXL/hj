@@ -9,6 +9,8 @@ import GoodsInfo from '@/components/goodsInfo'
 import Mine from '@/components/mine'
 import ShopCar from '@/components/shopCar'
 import People from '@/components/people'
+import For from '@/components/for'
+
 
 Vue.use(Router)
 
@@ -58,6 +60,11 @@ export default new Router({
       path: '/people',
       name: 'People',
       component: People
+    },
+    {
+      path: '/for',
+      name: 'For',
+      component: For
     }
   ]
 })

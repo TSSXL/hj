@@ -5,18 +5,15 @@
     </div>
     <div class="form">
       <span>
-    <img src="../img/phone.png" alt="">
-      <input type="text" v-model="number">
-    </span>
-      <span>
- <img src="../img/psd.png" alt="">
-      <input type="text" v-model="psd" placeholder="请输入密码">
+<img src="../img/phone.png" alt="">
+      <input type="text" v-model="number" placeholder="请输入账号">
     </span>
       <span>
    <img src="../img/yzm.png" alt="">
-      <input class="yzm" v-model="word" type="text" >
+      <input class="yzm" v-model="word" type="text" placeholder="请输入验证码">
+      <button @click="getYzm">获取验证码</button>
     </span>
-      <button @click="Login">重置密码</button>
+      <button @click="Login">下一步</button>
     </div>
   </div>
 </template>
@@ -25,7 +22,7 @@
   import qs from 'qs'
   import md5 from 'js-md5'
   export default {
-    name: 'forget',
+    name: 'for',
     data () {
       return {
         number:'',
@@ -33,11 +30,90 @@
         word:''
       }
     },
-    created(){
-      this.number="1234"
-      this.word="1345"
-    },
     methods:{
+      //获取验证码
+      getYzm(){
+        let Re= /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/
+        let email=/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g
+        //手机获取验证码
+        if(Re.test(this.number)) {
+          this.$http
+            .get("/api/VerifyCode/Send", {
+              params:{
+                phone:this.number
+              }
+            })
+            .then(
+              function (response) {
+                if(response.data.Status===1)
+                {
+                  this.$notify.error({
+                    title: "成功",
+                    message: "请查看您手机的验证码",
+                  })
+                }else if(response.data.Status===20){
+                  this.$notify.error({
+                    title: "抱歉",
+                    message: "该手机号已经注册",
+                  })
+                }else {
+                  this.$notify.error({
+                    title: "错误",
+                    message: "请输入正确的邮箱",
+                  })
+                }
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "出错啦",
+                  message: "请输入完整的信息",
+                });
+              }.bind(this)
+            )
+        }
+        //邮箱获取验证码
+        else if(email.test(this.number)) {
+          this.$http
+            .get("/api/User/EmailCode", {
+              params:{
+                EmailAddress:this.number
+              }
+            })
+            .then(
+              function (response) {
+                if(response.data.Status===1)
+                {
+                  this.$notify.error({
+                    title: "成功",
+                    message: "请进入您的邮箱查看验证码",
+                  })
+                }else{
+                  this.$notify.error({
+                    title: "错误",
+                    message: "请输入正确的邮箱",
+                  })
+                }
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "出错啦",
+                  message: "请输入正确的信息",
+                });
+              }.bind(this)
+            )
+        }
+        //都不符合
+        else{
+          this.$notify.error({
+            title: "请输入",
+            message: "账号是您的手机号或邮箱",
+          })
+        }
+      },
       //点击登录
       Login(){
         let Re= /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/
@@ -100,20 +176,18 @@
         //邮箱重置密码
         else if(email.test(this.number)&&this.psd!==""&&this.word!=="") {
           this.$http
-            .get("/api/Login/ChangePwdNext", {
+            .get("/api/Login/ChangePwd", {
               params:{
-                Uname:this.number,
-                NewPsd:md5(this.psd)
+                Code:this.word,
+                Uname:this.number
               }
             })
             .then(
               function (response) {
                 if(response.data.Status===1)
                 {
-                  localStorage.setItem('token', response.data.Result)
-                  this.$store.state.token = response.data.Result
-                  this.$message("修改成功")
-                  this.$router.push({path:'/'})
+                  this.$message("验证成功")
+                  this.$router.push({path:'/forget'})
                 }else{
                   this.$notify.error({
                     title: "出错啦",
@@ -125,7 +199,7 @@
             .catch(
               function (error) {
                 this.$notify.error({
-                  title: "修改失败",
+                  title: "错误",
                   message: "您输入的信息有误",
                 });
               }.bind(this)
@@ -236,7 +310,7 @@
       }
       .form{
         width:32%;
-         height:354px;
+        height:354px;
       }
     }
     @media only screen and (max-width: 1366px){

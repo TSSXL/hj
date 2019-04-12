@@ -2,26 +2,25 @@
   <div class="mine">
     <Logo-Component></Logo-Component>
     <ul class="nav">
-      <li  v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="selected===index?colorStyle:''">{{item.Name}}</li>
+      <li  v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" >{{item.Name}}</li>
     </ul>
     <div class="content">
       <p>我的购物车</p>
       <ul>
-        <li v-for="(item,index) in product">
-          <img class="j" src="../img/j.png"  @click="select()"  v-if="show">
-          <img class="j" src="../img/j_selected.png"  @click="select()" style="background-color: rgba(51, 100, 127, 1)" v-else>
+        <li v-for="item in product">
+            <el-checkbox    @change="changeSelect"  :label="item.ID"><p class="boxText">请选择</p></el-checkbox>
           <img class="image" @click="goods(item.ID,item.ClassID)" :src="item.Image[0]" alt="">
           <span class="info">
             <p>{{item.Name}}</p>
-            <p>￥{{item.Price}}</p>
+            <p :style="PriceStyle">￥{{item.Price}}</p>
             <p>￥{{item.DisPrice}}</p>
           </span>
           <span class="num">
-          <img src="../img/cut.png" alt="">
-          <span>{{item.Count}}</span>
-            <img src="../img/add.png" alt="">
+          <img src="../img/cut.png" @click="cutNum(item.Count,item.Name)">
+          <span>{{ item.Count}}</span>
+            <img src="../img/add.png" @click="addNum(item.Count,item.Name)">
           </span>
-           <span class="del">删除</span>
+           <span class="del" @click="del(item.ID)">删除</span>
         </li>
       </ul>
     </div>
@@ -37,33 +36,35 @@
     name: "shopCar",
     data(){
       return{
-        selected:0,
-        colorStyle:{
-          color:'#33647F'
-        },
+        chose:'',
+        PriceStyle:{},
         navList:[
           {ID:"0",Name:"首页"}
         ],
         data:{},
         product:[],
-        show:true
       }
     },
     components:{LogoComponent,FootComponent},
     created(){
       this.getNav()
-      if(this.getCookie('token')!==null)
+      if(this.$store.state.token!==null || localStorage.getItem('token')!=='')
       {
-        this.getShopCar(this.getCookie('token'))
+        this.PriceStyle={
+          textDecoration:'line-through'
+        }
+
+        this.getShopCar(this.$store.state.token || localStorage.getItem('token'))
       }else{
         this.$message("您还未登录")
         this.$router.push({path:'/login'})
       }
     },
     methods:{
-      select(index){
-        this.show=!this.show;
+      changeSelect(val){
+        this.chose=val
       },
+      //获取购物车商品
       getShopCar(Token){
         this.$http
           .get("/api/Shopping/ShoppingListMsg",{params:{
@@ -79,10 +80,95 @@
             function (error) {
               this.$notify.error({
                 title: "错误",
-                message: "请通知后台",
+                message: "获取购物车商品失败",
               });
             }.bind(this)
           )
+      },
+      //减少商品数量
+      cutNum(val,name){
+        if(val===0){
+        this.$message("数量为0，您可以选择删除")
+        }else{
+          this.$http
+            .get("/api/Shopping/ShoppingAlter",{
+              params:{
+                token:this.$store.state.token || localStorage.getItem('token'),
+                ProName:name,
+                Count:--val
+              }
+            })
+            .then(
+              function (response) {
+                this.getShopCar(this.$store.state.token || localStorage.getItem('token'))
+                this.$message(response.data.Result)
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "错误",
+                  message: "减少购物车数量出错",
+                });
+              }.bind(this)
+            )
+        }
+    },
+      //增加商品数量
+      addNum(val,name){
+        this.$http
+          .get("/api/Shopping/ShoppingAlter",{
+            params:{
+              token:this.$store.state.token || localStorage.getItem('token'),
+              ProName:name,
+              Count:++val
+            }
+          })
+          .then(
+            function (response) {
+              this.getShopCar(this.$store.state.token || localStorage.getItem('token'))
+              this.$message(response.data.Result)
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.$notify.error({
+                title: "错误",
+                message: "添加购物车数量出错",
+              });
+            }.bind(this)
+          )
+
+      },
+      //删除商品
+      del(ID){
+        if(this.chose===true)
+        {
+          this.$http
+            .get("/api/Shopping/ShoppingDel",{
+              params:{
+                token:this.$store.state.token || localStorage.getItem('token'),
+                IDs:ID
+              }
+            })
+            .then(
+              function (response) {
+                this.getShopCar(this.$store.state.token || localStorage.getItem('token'))
+                this.chose=''
+                this.$message(response.data.Result)
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "错误",
+                  message: "删除商品失败",
+                });
+              }.bind(this)
+            )
+        }else{
+          this.$message("请选中此商品再删除")
+        }
       },
       //获取导航栏
       getNav(){
@@ -102,11 +188,12 @@
             }.bind(this)
           )
       },
+      //点击商品进入商品详情
       goods(ID,ClassID){
         this.$router.push({path:'/goodsInfo',query:{ID:ID,ClassID:ClassID}})
       },
+      //点击导航栏跳转
       handle(index,ID){
-        this.select=index
         if(index===0)
         {
           this.$router.push('/')
@@ -124,11 +211,11 @@
     .nav{
       list-style: none;
       height:100px;
-      margin-left: 10%;
+      margin-left: 2%;
       margin-top: 0;
       li{
         float: left;
-        width:11%;
+        width:15%;
         height:100%;
         font-size: 2.5em;
         font-weight: bolder;
@@ -169,8 +256,14 @@
           flex-direction: row;
           margin-left: 5%;
           margin-top: 2%;
+          .boxText{
+            font-size: 1em;
+            position: absolute;
+            margin-left: 0%;
+            line-height: 40px;
+          }
           img{
-            margin-left: 2%;
+            margin-left: 4%;
           }
           img:hover{
             cursor: pointer;
@@ -274,22 +367,66 @@
     }
     @media only screen and (max-width: 1440px){
       .content{
-        p{
-          margin-left: -62%;
+     p{
+       margin-left: -57.5%;
+     }
+        ul{
+          li{
+            .info{
+              width:45%;
+            }
+            .num{
+              margin-top: 6%;
+            }
+            .del{
+              margin-top: 6.5%;
+              margin-left: 1%;
+            }
+          }
         }
       }
     }
     @media only screen and (max-width: 1280px){
       .content{
         p{
-          margin-left: -63%;
+          margin-left: -56.5%;
+        }
+        ul{
+          li{
+            .num{
+              margin-top: 6.5%;
+            }
+            .del{
+              margin-top: 7%;
+              font-size: 1.8em;
+            }
+          }
         }
       }
     }
     @media only screen and (max-width: 1024px){
+      .nav {
+        margin-left: 1%;
+       li{
+      width:15%;
+     }
+      }
       .content{
         p{
-          margin-left: -66%;
+          margin-left: -53%;
+        }
+        ul{
+          li{
+            .info{
+              width:36%;
+            }
+            .num{
+              margin-top: 8%;
+            }
+            .del{
+              margin-top: 8.5%;
+            }
+          }
         }
       }
     }

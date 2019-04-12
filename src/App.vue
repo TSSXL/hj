@@ -6,12 +6,7 @@
 
 <script>
 export default {
-  name: 'App',
-  created() {
-    window.onbeforeunload=function (e) {
-      this.delCookie('token')
-    }
-  }
+  name: 'App'
 }
 </script>
 
@@ -28,6 +23,16 @@ export default {
   color: #2c3e50;
   font-size: 62.5%;
 }
+  .el-checkbox__inner{
+    width:30px;
+    height:30px;
+    margin-top: 55px;
+    margin-left: 20px;
+  }
+  .el-checkbox__inner::after{
+    height: 18px;
+    left: 13px;
+  }
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;

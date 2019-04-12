@@ -16,7 +16,7 @@
         <p class="l">{{item.Title}}</p>
         <ul class="containUl">
           <li v-for="j in item.Context">
-            <img  @click="goods(j.ID,j.ClassID)" :src="j.image[0]"  alt="正在加载中">
+            <img  @click="goods(j.ID,j.ClassID)" :src="j.image.ImagePath&&j.image.ImagePath[0]"  alt="正在加载中">
             <p>{{j.Name}}</p>
             <p class="price" :style="PriceStyle">￥{{j.Price}}</p>
            <span>会员价￥{{j.DisPrice}}</span>
@@ -50,12 +50,12 @@
       created(){
           this.getImg()
           this.getNav()
-        if(this.getCookie('token')!==null)
+        if(this.$store.state.token!=='' || localStorage.getItem('token')!=='')
         {
           this.PriceStyle={
             textDecoration:'line-through'
           }
-          this.getGoodsToken(this.getCookie('token'))
+          this.getGoodsToken(this.$store.state.token || localStorage.getItem('token'))
         }
         else{
           this.$message("您还未登录")
@@ -93,7 +93,6 @@
               .then(
                 function (response) {
                 this.navList=this.navList.concat(response.data.Result)
-                  this.setCookie('nav',this.navList)
                 }.bind(this)
               )
               .catch(
@@ -145,10 +144,8 @@
             )
             .catch(
               function (error) {
-                this.$notify.error({
-                  title: "错误",
-                  message: "获取登录商品失败",
-                });
+                this.$message("登录失效，请重新登录")
+                this.$router.push({path:'/login'})
               }.bind(this)
             )
         },
@@ -176,10 +173,10 @@
      list-style: none;
      height:100px;
      margin-top: 0;
-     margin-left: 10%;
+     margin-left: 2%;
      li{
        float: left;
-       width:13%;
+       width:15%;
        height:100%;
        font-size: 2.5em;
        font-weight: bolder;
@@ -324,11 +321,6 @@
      }
    }
    @media only screen and (max-width: 1280px){
-     .nav {
-       li{
-         width:14%;
-       }
-     }
      .container{
        .l:after{
          margin-left: -7.5%;

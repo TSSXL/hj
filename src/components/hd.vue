@@ -9,7 +9,7 @@
         <span class="re" @click="re">注册</span>
       </div>
       <div class="rightT" v-else>
-        <span @click="goto" style="cursor: pointer" class="people"></span>
+        <img :src="info.UserImage" @click="goto" style="cursor: pointer" class="people">
         <span class="Title">合捷HMC</span>
           <img class="c" src="../img/car.png" @click="gotoShop">
           <span style="cursor: pointer" class="Title"@click="gotoShop" >购物车</span>
@@ -22,18 +22,39 @@
         name: "hd",
       data(){
           return{
+            info:{},
            num:true
           }
       },
       created(){
-         if(this.getCookie('token')!==null)
+         if(this.$store.state.token!=='' || localStorage.getItem('token')!=='')
          {
            this.num=false
-         }else{
-           true
+           this.getInfo(this.$store.state.token || localStorage.getItem('token'))
          }
       },
       methods:{
+        getInfo(token){
+          this.$http
+            .get("/api/Login/PersonnelInformation",{
+              params:{
+                token:token
+              }
+            })
+            .then(
+              function (response) {
+                this.info=response.data.Result
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "错误",
+                  message: "获取个人信息出错",
+                });
+              }.bind(this)
+            )
+        },
           login(){
             this.$router.push('/login')
           },
@@ -105,10 +126,8 @@
      .people{
        height:80px;
        width:80px;
-       display: inline-block;
-       background-color: yellow;
        border-radius: 50%;
-       margin-top: -5%;
+       margin-top: -8%;
      }
      .Title{
        font-size: 2.5em;
@@ -129,20 +148,8 @@
        font-size: 3em;
        width:140px;
      }
-     .right{
-       .rightImg{
-         margin-top: 3%;
-         margin-left: 45%;
-       }
-       .dl,.re{
-         margin-top:3.5%;
-       }
-       hr{
-         margin-top: 3.5%;
-         margin-left: 1.7%;
-       }
-     }
       .rightT{
+        width:25%;
         margin-left: 45%;
       }
 
@@ -150,13 +157,8 @@
    @media only screen and (max-width: 1440px){
      height:120px;
      .right{
-       .rightImg{
-         margin-left: 40%;
-         margin-top: 3.5%;
-       }
-       .dl,.re,hr{
-         margin-top:4%;
-       }
+       width:12%;
+       margin-left: 52%;
      }
       .rightT{
     width:30%;
@@ -164,25 +166,29 @@
       }
    }
    @media only screen and (max-width: 1366px){
-     .rightImg{
-       margin-left: 38%;
+ .right{
+   margin-left: 50%;
+ }
+     .rightT{
+       margin-left: 35%;
      }
    }
    @media only screen and (max-width: 1280px){
-     .rightImg{
-       margin-left: 35%;
+     .right{
+       margin-left: 48%;
      }
      .rightT{
-       margin-left: 35%;
+       margin-left: 30%;
      }
    }
    @media only screen and (max-width: 1024px){
-     .rightImg{
-       margin-left: 25%;
-     }
+.right{
+  width:18%;
+  margin-left: 35%;
+}
      .rightT{
        width:35%;
-       margin-left: 20%;
+       margin-left: 18%;
        margin-top: 4%;
      }
    }

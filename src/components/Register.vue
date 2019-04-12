@@ -24,6 +24,7 @@
 
 <script>
   import qs from 'qs'
+  import md5 from 'js-md5'
 export default {
   name: 'Register',
   data () {
@@ -187,13 +188,15 @@ export default {
             params:{
               Code:this.word,
               Uname:this.number,
-              Pwd:this.psd
+              Pwd:md5(this.psd)
             }
           })
           .then(
             function (response) {
               if(response.data.Status===1)
               {
+                localStorage.setItem('token', response.data.Result)
+                this.$store.state.token = response.data.Result
                 this.$message("注册成功")
                 this.$router.push({path:'/'})
               }else if(response.data.Status===11)
@@ -265,11 +268,12 @@ export default {
         border-bottom: 1px solid #A8A8AA;
       }
       img{
-        height:30px;
+        height:29px;
         width:24px;
         float: left;
         margin-left:14%;
         padding-bottom: 0;
+        margin-top: 5px;
       }
       button{
         width:18%;
