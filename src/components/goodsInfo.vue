@@ -7,16 +7,20 @@
       <!--商品名称-->
       <div class="goodsMsg">
        <div class="left">
-         <video class="video" autoplay="autoplay" controls v-if="num">
-           <source src="https://ss0.bdstatic.com/-0U0bnSm1A5BphGlnYG/cae-legoup-video-target/d412670f-2036-4609-bb7c-d1998a49a9d1.mp4"  type="video/mp4">
+         <video class="video" autoplay="autoplay" controls v-if="goodInfo.image&&goodInfo.image.VideoPath.length>0">
+           <source :src="goodInfo.image&&goodInfo.image.VideoPath[0]"  type="video/mp4">
          </video>
-         <img  :src="goodInfo.image&&goodInfo.image[0]" alt="加载中" v-else >
+         <img  :src="goodInfo.image&&goodInfo.image.ImagePath[0]" alt="加载中" v-else >
           <div class="lb">
-            <img src="../img/left.png" @click="goLeft">
-            <span>
-              <img  v-for="item in sImg" :src="item" alt="加载中">
-            </span>
-            <img src="../img/right.png" @click="goRight">
+            <img src="../img/left.png" >
+
+              <ul id="images" >
+                  <li v-for="item in sImg">
+                    <img @click="big" :src="item" alt="加载中">
+                  </li>
+                  </ul>
+
+            <img src="../img/right.png" >
           </div>
        </div>
         <div class="right">
@@ -32,7 +36,7 @@
       <div class="tjGoods" v-if="isShow">
         <p>商品推荐</p>
         <div class="lbBig">
-          <img class="z" src="../img/z.png" alt="加载中">
+          <img class="z" src="../img/z.png" alt="加载中" @click="goLeft">
           <ul>
             <li v-for="item in tjList">
               <img :src="item.image&&item.image[0]" @click="goods(item.ID,item.ClassID)" alt="加载中">
@@ -40,14 +44,13 @@
               <p>会员价￥{{item.DisPrice}}</p>
             </li>
           </ul>
-          <img class="y" src="../img/y.png" alt="">
+          <img class="y" src="../img/y.png" alt="" @click="goRight">
         </div>
       </div>
       <div class="xqGoods" :style="isShow===false?style:''">
         <p>商品详情</p>
-        <img src="../img/one.jpg" alt="">
-        <img src="../img/one.jpg" alt="">
-        <img src="../img/one.jpg" alt="">
+        <div style="width:100%;font-size: 2em" v-html="decodeURIComponent(goodInfo.Content)">
+        </div>
       </div>
       <Foot-Component></Foot-Component>
     </div>
@@ -56,6 +59,7 @@
 <script>
   import LogoComponent from './hd'
   import FootComponent from './foot'
+  import Viewer from 'viewerjs'
     export default {
         name: "goodsInfo",
       data(){
@@ -74,7 +78,8 @@
             colorStyle:{
               color:'#33647F'
             },
-            sImg:[]
+            sImg:[],
+            PageIndex:1,
           }
       },
       components:{LogoComponent,FootComponent},
@@ -84,12 +89,17 @@
         {
           this.isShow=true
          this.getGoodsInfoToken(this.$route.query.ID,this.$store.state.token || localStorage.getItem('token'))
-          this.getTj(1,this.$route.query.ClassID,this.$route.query.ID)
+          this.getTj(this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
         }else{
           this.getGoodsInfo(this.$route.query.ID)
         }
       },
       methods:{
+        big(){
+          const viewer=new Viewer(document.getElementById("images"), {
+            inline: false
+          })
+        },
           ColorStyle(ID)
           {
             if(ID===this.$route.query.ClassID)
@@ -137,8 +147,12 @@
             .then(
               function (response) {
               this.goodInfo=response.data.Result[0]
-                this.sImg=response.data.Result[0].image
-
+                if(this.goodInfo.image.ImagePath.length>=3)
+                {
+                  this.sImg=this.goodInfo.image.ImagePath.slice(0,3)
+                }else{
+                  this.sImg=this.goodInfo.image.ImagePath
+                }
               }.bind(this)
             )
             .catch(
@@ -150,6 +164,7 @@
               }.bind(this)
             )
         },
+        //获取商品详情带token
         getGoodsInfoToken(ID,token){
           this.$http
             .get("/api/Shopping/ShoppingDetailById",{
@@ -161,7 +176,12 @@
             .then(
               function (response) {
                 this.goodInfo=response.data.Result[0]
-                this.sImg=response.data.Result[0].image.slice(0,3)
+                if(this.goodInfo.image.ImagePath.length>=3)
+                {
+                  this.sImg=this.goodInfo.image.ImagePath.slice(0,3)
+                }else{
+                  this.sImg=this.goodInfo.image.ImagePath
+                }
               }.bind(this)
             )
             .catch(
@@ -191,6 +211,7 @@
               }.bind(this)
             )
         },
+        //添加到购物车
         addCar(){
           if(this.getCookie('token')===null)
           {
@@ -207,14 +228,7 @@
               })
               .then(
                 function (response) {
-                  if(response.data.Status===10)
-                  {
-                    this.$alert('已添加到购物车',  {
-                      confirmButtonText: '确定'
-                    })
-                  }else{
                     this.$message(response.data.Result)
-                  }
                 }.bind(this)
               )
               .catch(
@@ -227,11 +241,17 @@
               )
           }
         },
+        //获取商品推荐
         goLeft(){
-
+            if(--this.PageIndex<=0)
+            {
+              this.getTj(1,this.$route.query.ClassID,this.$route.query.ID)
+            }else{
+              this.getTj(--this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
+            }
           },
         goRight(){
-
+          this.getTj(++this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
         },
         handle(index,ID){
           if(index===0)
@@ -299,23 +319,27 @@
             margin-top: 9%;
           }
           img:first-child{
-            margin-left: 4.5%;
+            margin-left: 7%;
           }
           img:hover{
             cursor: pointer;
           }
-          span{
+          ul{
             display: inline-block;
             height:100%;
-            width:75%;
-            img{
-              height:65%;
-              width:25%;
-              margin-top: 5%;
-              margin-left: 5%;
-            }
-            img:first-child{
-              margin-left: -2%;
+            width:68%;
+            list-style: none;
+            margin-left: -10%;
+            li{
+              float: left;
+             width:30%;
+              height:70%;
+              margin-left: 2%;
+              img{
+                width:100%;
+                height:100%;
+                margin-top: 0;
+              }
             }
           }
         }
@@ -382,6 +406,7 @@
         height:140px;
         .z,.y{
           position: absolute;
+          cursor: pointer;
         }
         .z{
           margin-left: -30%;
@@ -439,6 +464,13 @@
     }
     @media only screen and (max-width: 1680px){
    .goodsMsg{
+     .left{
+       .lb{
+         img:first-child{
+           margin-left: 5%;
+         }
+       }
+     }
      .right{
        p{
          font-size: 2.5em;
@@ -457,7 +489,7 @@
         .lbBig{
           height:180px;
           .y{
-            margin-top: -7.5%;
+            margin-top: -8.8%;
           }
         }
       }
@@ -491,7 +523,7 @@
           }
           .y{
             margin-left: 33.5%;
-            margin-top: -9.8%;
+            margin-top: -10%;
           }
         }
       }

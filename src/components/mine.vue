@@ -3,7 +3,8 @@
       <Logo-Component></Logo-Component>
       <div class="content">
         <p>关于我们</p>
-        <span>{{content.Content}}</span>
+        <span v-html="content">
+        </span>
       </div>
       <Foot-Component></Foot-Component>
     </div>
@@ -29,7 +30,7 @@
               .post("/api/Shopping/AboutUs")
               .then(
                 function (response) {
-               this.content=response.data.Result[0]
+                 this.content=decodeURIComponent(response.data.Result[0].Content)
                 }.bind(this)
               )
               .catch(

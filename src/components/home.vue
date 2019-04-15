@@ -250,7 +250,6 @@
            margin-top: -2.3%;
            font-size: 2.2em;
            font-weight: bolder;
-           margin-left: -2%;
           color:#33647F;
          }
        }

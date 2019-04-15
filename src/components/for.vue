@@ -11,9 +11,9 @@
       <span>
    <img src="../img/yzm.png" alt="">
       <input class="yzm" v-model="word" type="text" placeholder="请输入验证码">
-      <button @click="getYzm">获取验证码</button>
+      <button @click="getYzm" style="cursor: pointer">获取验证码</button>
     </span>
-      <button @click="Login">下一步</button>
+      <button @click="Login" style="cursor: pointer">下一步</button>
     </div>
   </div>
 </template>
@@ -119,62 +119,40 @@
         let Re= /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/
         let email=/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g
         //手机重置密码
-        if(Re.test(this.number)&&this.psd!==""&&this.word!=="") {
-          //后台判断验证码是否正确
+        if(Re.test(this.number)&&this.word!=="") {
           this.$http
-            .get("/api/VerifyCode/Verify",{
+            .get("/api/Login/ChangePwd", {
               params:{
-                phone:this.number,
-                code:this.word
-              }})
+                Code:this.word,
+                Uname:this.number,
+                type:"111"
+              }
+            })
             .then(
               function (response) {
-                //如果正确则执行修改密码
                 if(response.data.Status===1)
                 {
-                  this.$http
-                    .post("/api/User/Register",
-                      qs.stringify({
-                        Phone:"13866667777",
-                        Pwd:"1234",
-                        Code:1234,
-                        Lng:0,
-                        Lat:0,
-                        Id:"string"
-                      }))
-                    .then(
-                      function (response) {
-                        if(response.data.Status===1)
-                        {
-                          this.$message("修改成功")
-                          this.$router.push({path:'/'})
-                        }
-                      }.bind(this)
-                    )
-                    .catch(
-                      function (error) {
-                        this.$notify.error({
-                          title: "修改失败",
-                          message: "您输入的信息有误",
-                        });
-                      }.bind(this)
-                    )
+                  this.$message("验证成功")
+                  this.$router.push({path:'/forget',query:{name:response.data.Result.name,code:response.data.Result.code}})
                 }else{
-                  this.$message("验证码输入错误")
+                  this.$notify.error({
+                    title: "出错啦",
+                    message: "请通知后台",
+                  });
                 }
               }.bind(this)
             )
             .catch(
               function (error) {
                 this.$notify.error({
-                  title: "修改失败",
+                  title: "错误",
                   message: "您输入的信息有误",
                 });
               }.bind(this)
             )
         }
         //邮箱重置密码
-        else if(email.test(this.number)&&this.psd!==""&&this.word!=="") {
+        else if(email.test(this.number)&&this.word!=="") {
           this.$http
             .get("/api/Login/ChangePwd", {
               params:{
@@ -187,7 +165,7 @@
                 if(response.data.Status===1)
                 {
                   this.$message("验证成功")
-                  this.$router.push({path:'/forget'})
+                  this.$router.push({path:'/forget',query:{name:response.data.Result.name,code:response.data.Result.code}})
                 }else{
                   this.$notify.error({
                     title: "出错啦",

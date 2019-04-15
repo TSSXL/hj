@@ -10,9 +10,9 @@
       </div>
       <div class="rightT" v-else>
         <img :src="info.UserImage" @click="goto" style="cursor: pointer" class="people">
-        <span class="Title">合捷HMC</span>
+        <span class="Title" @click="goto">{{info.NickName}}</span>
           <img class="c" src="../img/car.png" @click="gotoShop">
-          <span style="cursor: pointer" class="Title"@click="gotoShop" >购物车</span>
+          <span  class="Title"@click="gotoShop" >购物车</span>
      </div>
     </div>
 </template>
@@ -88,6 +88,7 @@
      margin-top: 3.3%;
      margin-left: 1%;
      color:#323232;
+    width:10%;
    }
    .right{
      width:9%;
@@ -117,29 +118,31 @@
      }
    }
    .rightT{
-     width:20%;
-     height:60%;
-     margin-left: 50%;
-     margin-top: 3.3%;
+     width:40%;
+     height:80%;
+     margin-left: 30%;
+     margin-top: 1%;
      display: flex;
      flex-direction: row;
      .people{
        height:80px;
        width:80px;
        border-radius: 50%;
-       margin-top: -8%;
+       margin-left: 20%;
      }
      .Title{
-       font-size: 2.5em;
+       font-size: 2em;
        color:#919191;
        font-weight: 400;
        margin-left: 5%;
        letter-spacing: 1px;
+       margin-top: 5%;
+       cursor: pointer;
      }
      .c{
        height:25px;
        width:30px;
-       margin-top: 0;
+       margin-top: 5%;
        cursor: pointer;
      }
    }
@@ -148,11 +151,6 @@
        font-size: 3em;
        width:140px;
      }
-      .rightT{
-        width:25%;
-        margin-left: 45%;
-      }
-
    }
    @media only screen and (max-width: 1440px){
      height:120px;
@@ -161,24 +159,22 @@
        margin-left: 52%;
      }
       .rightT{
-    width:30%;
-        margin-left: 40%;
+        width:45%;
+      margin-left: 22%;
       }
    }
    @media only screen and (max-width: 1366px){
  .right{
    margin-left: 50%;
  }
-     .rightT{
-       margin-left: 35%;
-     }
    }
    @media only screen and (max-width: 1280px){
      .right{
        margin-left: 48%;
      }
      .rightT{
-       margin-left: 30%;
+       width:50%;
+       margin-left: 13%;
      }
    }
    @media only screen and (max-width: 1024px){
@@ -187,9 +183,8 @@
   margin-left: 35%;
 }
      .rightT{
-       width:35%;
-       margin-left: 18%;
-       margin-top: 4%;
+       width:65%;
+       margin-left: 0%;
      }
    }
  }

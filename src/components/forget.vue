@@ -16,7 +16,7 @@
    <img src="../img/yzm.png" alt="">
       <input class="yzm" v-model="word" type="text" >
     </span>
-      <button @click="Login">重置密码</button>
+      <button @click="Login" style="cursor: pointer">重置密码</button>
     </div>
   </div>
 </template>
@@ -34,110 +34,43 @@
       }
     },
     created(){
-      this.number="1234"
-      this.word="1345"
+      this.number=this.$route.query.name
+      this.word=this.$route.query.code
     },
     methods:{
       //点击登录
       Login(){
-        let Re= /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/
-        let email=/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g
-        //手机重置密码
-        if(Re.test(this.number)&&this.psd!==""&&this.word!=="") {
-          //后台判断验证码是否正确
-          this.$http
-            .get("/api/VerifyCode/Verify",{
-              params:{
-                phone:this.number,
-                code:this.word
-              }})
-            .then(
-              function (response) {
-                //如果正确则执行修改密码
-                if(response.data.Status===1)
-                {
-                  this.$http
-                    .post("/api/User/Register",
-                      qs.stringify({
-                        Phone:"13866667777",
-                        Pwd:"1234",
-                        Code:1234,
-                        Lng:0,
-                        Lat:0,
-                        Id:"string"
-                      }))
-                    .then(
-                      function (response) {
-                        if(response.data.Status===1)
-                        {
-                          this.$message("修改成功")
-                          this.$router.push({path:'/'})
-                        }
-                      }.bind(this)
-                    )
-                    .catch(
-                      function (error) {
-                        this.$notify.error({
-                          title: "修改失败",
-                          message: "您输入的信息有误",
-                        });
-                      }.bind(this)
-                    )
-                }else{
-                  this.$message("验证码输入错误")
-                }
-              }.bind(this)
-            )
-            .catch(
-              function (error) {
+        this.$http
+          .get("/api/Login/ChangePwdNext", {
+            params:{
+              Uname:this.number,
+              NewPwd:md5(this.psd)
+            }
+          })
+          .then(
+            function (response) {
+              if(response.data.Status===1)
+              {
+                localStorage.setItem('token', response.data.Result)
+                this.$store.state.token = response.data.Result
+                this.$message("修改成功")
+                this.$router.push({path:'/'})
+              }else{
                 this.$notify.error({
-                  title: "修改失败",
-                  message: "您输入的信息有误",
+                  title: "出错啦",
+                  message: "请通知后台",
                 });
-              }.bind(this)
-            )
-        }
-        //邮箱重置密码
-        else if(email.test(this.number)&&this.psd!==""&&this.word!=="") {
-          this.$http
-            .get("/api/Login/ChangePwdNext", {
-              params:{
-                Uname:this.number,
-                NewPsd:md5(this.psd)
               }
-            })
-            .then(
-              function (response) {
-                if(response.data.Status===1)
-                {
-                  localStorage.setItem('token', response.data.Result)
-                  this.$store.state.token = response.data.Result
-                  this.$message("修改成功")
-                  this.$router.push({path:'/'})
-                }else{
-                  this.$notify.error({
-                    title: "出错啦",
-                    message: "请通知后台",
-                  });
-                }
-              }.bind(this)
-            )
-            .catch(
-              function (error) {
-                this.$notify.error({
-                  title: "修改失败",
-                  message: "您输入的信息有误",
-                });
-              }.bind(this)
-            )
-        }
-        //都不符合
-        else{
-          this.$notify.error({
-            title: "错误",
-            message: "您少输或输入的格式不正确",
-          });
-        }
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.$notify.error({
+                title: "修改失败",
+                message: "您输入的信息有误",
+              });
+            }.bind(this)
+          )
       }
     }
   }

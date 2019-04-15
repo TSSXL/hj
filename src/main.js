@@ -7,6 +7,9 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import VueVideoPlayer from 'vue-video-player';
 import 'video.js/dist/video-js.css'
+import Viewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
+Vue.use(Viewer);
 import store from './store/index'
 
 import axios from 'axios'

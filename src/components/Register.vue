@@ -15,9 +15,9 @@
     <span>
       <img src="../img/yzm.png" alt="">
       <input class="yzm" v-model="word" type="text" placeholder="请输入验证码">
-      <button @click="getYzm">获取验证码</button>
+      <button @click="getYzm" style="cursor: pointer">获取验证码</button>
     </span>
-    <button @click="zc">免费注册</button>
+    <button @click="zc" style="cursor: pointer">免费注册</button>
   </div>
 </div>
 </template>

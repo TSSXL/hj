@@ -20,7 +20,7 @@
         </div>
         <div class="a">
           <img src="../img/email.png" alt="">
-          <p>Email:info@hijet.com.cn</p>
+          <p>Email:info @ hijet.com.cn</p>
         </div>
       </div>
       <hr>
@@ -63,7 +63,7 @@
     color:#777777;
     font-size: 1.5em;
     margin-top: 2%;
-    font-weight: bolder;
+    font-weight: bold;
   }
   .mainInfo{
     display: flex;

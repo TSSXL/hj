@@ -28,23 +28,24 @@
         <span style="color:#33647F;cursor: pointer" @click="Dialog">去认证</span>
       </div>
     </div>
-      <button>保存</button>
+      <button @click="editPerson">保存</button>
     </div>
+    <!--点击认证-->
     <el-dialog
       title="会员认证"
       :visible.sync="dialogVisible"
-      width="30%"
+      width="40%"
       style="margin-top: 5%;"
      >
       <el-form  label-width="80px">
         <el-form-item label="会员姓名:">
-          <el-input></el-input>
+          <el-input v-model="VipName"></el-input>
         </el-form-item>
         <el-form-item label="身份证号:">
-          <el-input ></el-input>
+          <el-input v-model="IDCard"></el-input>
         </el-form-item>
         <el-form-item label="营业执照:">
-          <el-upload v-model="form.Image" class="avatar-uploader" :limit="1" :action="action" :on-preview="handlePictureCardPreviewU"
+          <el-upload v-model="yyImage" class="avatar-uploader" :limit="1" :action="action" :on-preview="handlePictureCardPreviewU"
                      list-type="picture-card" :on-success="handleAvatarSuccessU" >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -55,9 +56,11 @@
     <el-button  @click="dialogVisible = false">取 消</el-button>
   </span>
     </el-dialog>
+    <!--提交认证-->
     <el-dialog
       :visible.sync="dialogVisibleTwo"
       width="30%"
+      class="aaa"
       style="margin-top: 5%;"
     >
       <img src="../img/hy.png" alt="">
@@ -75,12 +78,13 @@
     name: "people",
     data(){
       return{
+        VipName:'',
+        IDCard:'',
+        yyImage:'',
+        imageUrl:'',
         actionUser:'',
         info:{},
         action:'',
-       form:{
-         Image:''
-       },
         dialogVisible:false,
         dialogVisibleTwo:false,
         navList:[
@@ -93,7 +97,62 @@
       this.getNav()
       this.getInfo(this.$store.state.token || localStorage.getItem('token'))
     },
+    beforeMount(){
+      this.actionUser='http://192.168.1.105/HMC/api/Login/UpdateForImage?type=0'
+      this.action='http://192.168.1.105/HMC/api/Login/UpdateForImage?type=1'
+    },
     methods:{
+      //修改个人信息
+      editPerson(){
+        if(this.imageUrl!=='')
+        {
+          this.$http
+            .get("/api/Login/UpdateInformation",{
+              params:{
+                token:this.$store.state.token || localStorage.getItem('token'),
+                NickName:this.info.NickName,
+                Image:this.imageUrl
+              }
+            })
+            .then(
+              function (response) {
+              this.$message(response.data.Result)
+                this.getInfo(this.$store.state.token || localStorage.getItem('token'))
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "错误",
+                  message: "修改失败",
+                });
+              }.bind(this)
+            )
+        }else{
+          this.$http
+            .get("/api/Login/UpdateInformation",{
+              params:{
+                token:this.$store.state.token || localStorage.getItem('token'),
+                NickName:this.info.NickName
+              }
+            })
+            .then(
+              function (response) {
+              this.$message(response.data.Result)
+                this.getInfo(this.$store.state.token || localStorage.getItem('token'))
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "错误",
+                  message: "修改失败",
+                });
+              }.bind(this)
+            )
+        }
+
+      },
       //获取个人信息
       getInfo(token){
         this.$http
@@ -145,27 +204,52 @@
       },
       //点击认证
       Dialog(){
+        this.VipName=''
+        this.IDCard=''
+        this.yyImage=''
       this.dialogVisible=true
       },
       //弹框点击提交
       tj(){
         this.dialogVisible=false
-       this.dialogVisibleTwo=true
+        this.$http
+          .get("/api/Login/MembershipCertification",{
+            params:{
+            token:this.$store.state.token || localStorage.getItem('token'),
+              VipName:this.VipName,
+              IDCard:this.IDCard,
+              Image:this.yyImage
+            }
+          })
+          .then(
+            function (response) {
+           this.$message(response.data.Result)
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.$notify.error({
+                title: "错误",
+                message: "认证失败",
+              });
+            }.bind(this)
+          )
+       // this.dialogVisibleTwo=true
       },
+      //上传前
       handlePictureCardPreview(file) {
-
+       console.log(file)
       },
+      //上传成功
       handleAvatarSuccess(res, file) {
-        console.log(res.data.Result[0])
-        // this.imageUrl = URL.createObjectURL(file.raw);
+        this.imageUrl=res.Result[0]
       },
       handlePictureCardPreviewU(file) {
 
       },
       handleAvatarSuccessU(res, file) {
-        console.log(res.data.Result[0])
-        // this.imageUrl = URL.createObjectURL(file.raw);
-      },
+        this.yyImage=res.Result[0]
+      }
     }
   }
 </script>

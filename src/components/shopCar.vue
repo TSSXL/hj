@@ -8,7 +8,7 @@
       <p>我的购物车</p>
       <ul>
         <li v-for="item in product">
-            <el-checkbox    @change="changeSelect"  :label="item.ID"><p class="boxText">请选择</p></el-checkbox>
+            <el-checkbox v-model="checkCity"   @change="changeSelect"  :label="item.ID"><p class="boxText">请选择</p></el-checkbox>
           <img class="image" @click="goods(item.ID,item.ClassID)" :src="item.Image[0]" alt="">
           <span class="info">
             <p>{{item.Name}}</p>
@@ -24,6 +24,10 @@
         </li>
       </ul>
     </div>
+      <div class="checkAll" :style="delAllStyle">
+        <el-checkbox class="c" @change="selectAll"></el-checkbox>
+        <span @click="delAll">删除</span>
+    </div>
     <div class="allPrice">总价:{{data.NewTotal}}</div>
     <Foot-Component></Foot-Component>
   </div>
@@ -36,6 +40,9 @@
     name: "shopCar",
     data(){
       return{
+        delAllStyle:{},
+        choseAll:'',
+        checkCity:[],
         chose:'',
         PriceStyle:{},
         navList:[
@@ -61,6 +68,46 @@
       }
     },
     methods:{
+      selectAll(val){
+       this.choseAll=val
+        if(val===true)
+        {
+          this.checkCity=this.product.map((item)=>{
+            return item.ID
+          })
+        }else{
+          this.checkCity=[]
+        }
+      },
+      delAll(){
+        if(this.choseAll!==true)
+        {
+          this.$message("如果您要全部删除请先选中左侧的框")
+        }else{
+          this.$http
+            .get("/api/Shopping/ShoppingDel",{
+              params:{
+                token:this.$store.state.token || localStorage.getItem('token'),
+                IDs:this.checkCity.join(";")
+              }
+            })
+            .then(
+              function (response) {
+                this.getShopCar(this.$store.state.token || localStorage.getItem('token'))
+                this.delAllStyle={display:'none'}
+                this.$message(response.data.Result)
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "错误",
+                  message: "删除商品失败",
+                });
+              }.bind(this)
+            )
+        }
+      },
       changeSelect(val){
         this.chose=val
       },
@@ -232,7 +279,6 @@
     .content{
       display: inline-block;
       width:100%;
-      padding-bottom: 60px;
       background-color: rgb(249, 249, 249);
       p{
         color:#33647F;
@@ -338,6 +384,24 @@
         }
       }
     }
+    .checkAll{
+      width:100%;
+      padding-bottom: 30px;
+      position: relative;
+      background-color: rgb(249, 249, 249);
+      .c{
+        left: -31.6%;
+      }
+      span{
+        display: inline-block;
+        position: absolute;
+        right: 25.5%;
+        color:#33647F;
+        font-size: 2em;
+        top:53%;
+        cursor: pointer;
+      }
+    }
     .allPrice{
       width:100%;
       font-size: 2.5em;
@@ -364,6 +428,14 @@
           }
         }
       }
+      .checkAll{
+          .c{
+            left: -31%;
+          }
+        span{
+          right:23.5%;
+        }
+      }
     }
     @media only screen and (max-width: 1440px){
       .content{
@@ -385,6 +457,24 @@
           }
         }
       }
+      .checkAll{
+        .c{
+          left: -30.5%;
+        }
+        span{
+          right:23%;
+        }
+      }
+    }
+    @media only screen and (max-width: 1366px){
+      .checkAll{
+        .c{
+          left: -30%;
+        }
+        span{
+          right:21.8%;
+        }
+      }
     }
     @media only screen and (max-width: 1280px){
       .content{
@@ -401,6 +491,14 @@
               font-size: 1.8em;
             }
           }
+        }
+      }
+      .checkAll{
+        .c{
+          left: -29.5%;
+        }
+        span{
+          right:20.8%;
         }
       }
     }
@@ -427,6 +525,11 @@
               margin-top: 8.5%;
             }
           }
+        }
+      }
+      .checkAll{
+        .c{
+          left: -28%;
         }
       }
     }

@@ -12,7 +12,7 @@
       <img src="../img/psd.png" alt="">
       <input type="text" v-model="psd" placeholder="请输入密码">
     </span>
-      <button @click="Login">登录</button>
+      <button style="cursor: pointer" @click="Login">登录</button>
       <div class="handle">
         <span @click="gotoForget">忘记密码</span>
         <span @click="goRegister">免费注册</span>
@@ -42,7 +42,7 @@
           this.$http
             .post("/api/User/Register",
               qs.stringify({
-                Phone:"13866667777",
+                Phone:this.number,
                 Pwd:this.psd,
                 Code:1234,
                 Lng:0,

@@ -7,7 +7,7 @@
       <div class="classGoods">
         <ul>
           <li v-for="item in list" >
-            <img  @click="goods(item.ID,item.ClassID)"   :src="item.image[0]" >
+            <img  @click="goods(item.ID,item.ClassID)"   :src="item.image.ImagePath[0]" >
             <p>{{item.Name}}</p>
             <p class="price" :style="PriceStyle">￥{{item.Price}}</p>
             <span>会员价￥{{item.DisPrice}}</span>
