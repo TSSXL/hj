@@ -40,7 +40,8 @@
           this.$http
             .get("/api/VerifyCode/Send", {
               params:{
-                phone:this.number
+                phone:this.number,
+                Type:1
               }
             })
             .then(
@@ -125,7 +126,7 @@
               params:{
                 Code:this.word,
                 Uname:this.number,
-                type:"111"
+                type:"1"
               }
             })
             .then(
@@ -133,7 +134,7 @@
                 if(response.data.Status===1)
                 {
                   this.$message("验证成功")
-                  this.$router.push({path:'/forget',query:{name:response.data.Result.name,code:response.data.Result.code}})
+                  this.$router.push({path:'/forget',query:{name:response.data.Result.name,code:response.data.Result.code,token:response.data.Result.token}})
                 }else{
                   this.$notify.error({
                     title: "出错啦",
@@ -165,12 +166,9 @@
                 if(response.data.Status===1)
                 {
                   this.$message("验证成功")
-                  this.$router.push({path:'/forget',query:{name:response.data.Result.name,code:response.data.Result.code}})
+                  this.$router.push({path:'/forget',query:{name:response.data.Result.name,code:response.data.Result.code,token:response.data.Result.token}})
                 }else{
-                  this.$notify.error({
-                    title: "出错啦",
-                    message: "请通知后台",
-                  });
+                this.$message(response.data.Result)
                 }
               }.bind(this)
             )

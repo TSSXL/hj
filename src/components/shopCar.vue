@@ -55,7 +55,7 @@
     components:{LogoComponent,FootComponent},
     created(){
       this.getNav()
-      if(this.$store.state.token!==null || localStorage.getItem('token')!=='')
+      if(this.$store.state.token!=='' || localStorage.getItem('token')!==null)
       {
         this.PriceStyle={
           textDecoration:'line-through'
@@ -121,6 +121,9 @@
             function (response) {
             this.data=response.data.Result
               this.product=response.data.Result.list
+              if(this.product.length===0){
+                this.delAllStyle={display: 'none'}
+              }
             }.bind(this)
           )
           .catch(

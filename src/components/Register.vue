@@ -10,7 +10,8 @@
     </span>
     <span>
     <img src="../img/psd.png" alt="">
-      <input type="text" v-model="psd" placeholder="请输入密码">
+      <input :type="type" v-model="psd" placeholder="请输入密码">
+        <img style="margin-left: -5%;cursor: pointer" src="../img/eye.svg"  @click="showPsd">
     </span>
     <span>
       <img src="../img/yzm.png" alt="">
@@ -29,12 +30,16 @@ export default {
   name: 'Register',
   data () {
     return {
+      type:'password',
       number:'',
       psd:'',
       word:''
     }
   },
   methods:{
+    showPsd(){
+      this.type='text'
+    },
     //点击获取验证码
     getYzm(){
       let Re= /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/
@@ -44,7 +49,8 @@ export default {
         this.$http
           .get("/api/VerifyCode/Send", {
             params:{
-              phone:this.number
+              phone:this.number,
+              Type:0
             }
           })
           .then(
@@ -143,19 +149,24 @@ export default {
                 this.$http
                   .post("/api/User/Register",
                     qs.stringify({
-                      Phone:"13866667777",
-                      Pwd:"1234",
-                      Code:1234,
+                      Phone:this.number,
+                      Pwd:md5(this.psd),
+                      Code:this.word,
                       Lng:0,
                       Lat:0,
                       Id:"string"
                     }))
                   .then(
                     function (response) {
-                      if(response.data.Status===1)
+                      if(response.data.Status===105)
                       {
+                        localStorage.setItem('token', response.data.Result)
+                        this.$store.state.token = response.data.Result
                         this.$message("注册成功")
                         this.$router.push({path:'/'})
+                      }else{
+                        this.$message("该邮箱已被注册,即将跳转到登录页面")
+                        this.$router.push({path:'/login'})
                       }
                     }.bind(this)
                   )
@@ -201,7 +212,8 @@ export default {
                 this.$router.push({path:'/'})
               }else if(response.data.Status===11)
               {
-                this.$message("该邮箱已被注册")
+                this.$message("该邮箱已被注册,即将跳转到登录页面")
+                this.$router.push({path:'/login'})
               }else{
                 this.$message("未知错误")
               }

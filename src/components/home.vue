@@ -41,7 +41,8 @@
             imgList:[],
             select:0,
             colorStyle:{
-               color:'#33647F'
+               color:'#33647F',
+              borderTop:'2px solid #33647F'
             },
             list:[]
           }
@@ -50,14 +51,17 @@
       created(){
           this.getImg()
           this.getNav()
-        if(this.$store.state.token!=='' || localStorage.getItem('token')!=='')
+        if(this.$store.state.token!=='' || localStorage.getItem('token')!==null)
         {
           this.PriceStyle={
             textDecoration:'line-through'
           }
           this.getGoodsToken(this.$store.state.token || localStorage.getItem('token'))
         }
-        else{
+        else if(localStorage.getItem('token')!==null){
+          this.$message("您还未登录")
+          this.getGoodsToken(localStorage.getItem('token'))
+        }else{
           this.$message("您还未登录")
           this.getGoods()
         }
@@ -200,11 +204,11 @@
        content: '';
        display:inline-block;
        height:2px;
-       width:90px;
+       width:50px;
        background-color: #33647F;
        position: absolute;
        margin-top: 2%;
-       margin-left: -5%;
+       margin-left: -3.9%;
      }
      p{
        font-size: 2.5em;
@@ -260,9 +264,9 @@
       .l{
         text-indent: 2.5%;
       }
-      .l:after{
-        margin-left: -5.65%;
-      }
+   .l:after{
+   margin-left: -4.5%;
+    }
       .containUl{
         li{
           height:300px;
@@ -284,7 +288,7 @@
    @media only screen and (max-width: 1440px){
      .container{
        .l:after{
-         margin-left: -6.7%;
+         margin-left: -5.3%;
          margin-top: 2.5%;
        }
        .containUl{
@@ -308,7 +312,7 @@
    @media only screen and (max-width: 1366px){
      .container{
        .l:after{
-         margin-left: -7%;
+         margin-left: -5.4%;
        }
        .containUl{
          li{
@@ -322,7 +326,7 @@
    @media only screen and (max-width: 1280px){
      .container{
        .l:after{
-         margin-left: -7.5%;
+         margin-left: -5.9%;
        }
        .containUl{
          li{
@@ -349,8 +353,7 @@
      }
      .container{
        .l:after{
-         width:60px;
-         margin-left: -6.5%;
+         margin-left: -5.8%;
        }
        p{
          font-size: 1.8em;

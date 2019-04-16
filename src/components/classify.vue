@@ -38,7 +38,7 @@
         this.select=parseInt(this.$route.query.id)
         //获取导航栏
         this.getNav()
-        if(this.$route.query.ID!==undefined ||this.$store.state.token!=='')
+        if(this.$route.query.ID!==undefined &&this.$store.state.token!=='')
         {
           this.PriceStyle={
             textDecoration:'line-through'
@@ -47,13 +47,13 @@
         }else if(this.$store.state.token===''){
          this.getGoods(this.$route.query.ID)
         }else{
-          this.$message("请重新登录")
+          this.$message("您还未登录")
         }
       },
       methods:{
         colorStyle(index){
          if(index===this.select){
-           return {color:'#33647F'}
+           return {color:'#33647F',borderTop:'2px solid #33647F'}
          }
           },
           //获取导航栏

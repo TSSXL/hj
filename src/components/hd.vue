@@ -27,10 +27,12 @@
           }
       },
       created(){
-         if(this.$store.state.token!=='' || localStorage.getItem('token')!=='')
+         if(this.$store.state.token!=='' || localStorage.getItem('token')!==null)
          {
            this.num=false
            this.getInfo(this.$store.state.token || localStorage.getItem('token'))
+         }else{
+           this.num=true
          }
       },
       methods:{
@@ -50,7 +52,7 @@
               function (error) {
                 this.$notify.error({
                   title: "错误",
-                  message: "获取个人信息出错",
+                  message: "您还未登录",
                 });
               }.bind(this)
             )
@@ -93,7 +95,7 @@
    .right{
      width:9%;
      height:28%;
-     margin-left: 60%;
+     margin-left: 55%;
      margin-top: 3.3%;
      display: flex;
      flex-direction: row;

@@ -20,7 +20,7 @@
       </div>
       <div class="mainItem">
         <span>登录账号:</span>
-        <span>{{info.Account}}</span>
+        <span style="width:50%;">{{info.Account}}</span>
       </div>
       <div class="mainItem">
         <span>会员等级:</span>
@@ -95,7 +95,14 @@
     components:{LogoComponent,FootComponent},
     created(){
       this.getNav()
-      this.getInfo(this.$store.state.token || localStorage.getItem('token'))
+      if(this.$store.state.token!=='' || localStorage.getItem('token')!==null)
+      {
+        this.getInfo(this.$store.state.token || localStorage.getItem('token'))
+      }else{
+        this.$message("您还未登录")
+        this.$router.push({path:'/login'})
+      }
+
     },
     beforeMount(){
       this.actionUser='http://192.168.1.105/HMC/api/Login/UpdateForImage?type=0'
@@ -170,7 +177,7 @@
             function (error) {
               this.$notify.error({
                 title: "错误",
-                message: "获取个人信息出错",
+                message: "您还未登录",
               });
             }.bind(this)
           )
@@ -207,7 +214,7 @@
         this.VipName=''
         this.IDCard=''
         this.yyImage=''
-      this.dialogVisible=true
+        this.dialogVisible=true
       },
       //弹框点击提交
       tj(){
@@ -215,7 +222,7 @@
         this.$http
           .get("/api/Login/MembershipCertification",{
             params:{
-            token:this.$store.state.token || localStorage.getItem('token'),
+             token:this.$store.state.token || localStorage.getItem('token'),
               VipName:this.VipName,
               IDCard:this.IDCard,
               Image:this.yyImage
@@ -223,18 +230,18 @@
           })
           .then(
             function (response) {
-           this.$message(response.data.Result)
+                 this.dialogVisibleTwo=true
+                this.$message(response.data.Result)
             }.bind(this)
           )
           .catch(
             function (error) {
               this.$notify.error({
                 title: "错误",
-                message: "认证失败",
+                message: "请将信息填写完整",
               });
             }.bind(this)
           )
-       // this.dialogVisibleTwo=true
       },
       //上传前
       handlePictureCardPreview(file) {
@@ -330,6 +337,7 @@
         background-color: #33647F;
         border-radius: 10px ;
         color:white;
+        cursor: pointer;
       }
     }
     @media only screen and (max-width: 1440px){

@@ -1,7 +1,7 @@
 <template>
     <div class="foot">
       <img class="logoT" src="../img/logoT.png" alt="">
-      <p style="cursor: pointer" @click="gotoMine">关于我们</p>
+      <p style="cursor: pointer;font-size: 2em" @click="gotoMine">关于我们</p>
       <hr>
       <div class="mainInfo">
        <div class="a">
@@ -20,7 +20,7 @@
         </div>
         <div class="a">
           <img src="../img/email.png" alt="">
-          <p>Email:info @ hijet.com.cn</p>
+          <p>Email:info@hijet.com.cn</p>
         </div>
       </div>
       <hr>
@@ -68,7 +68,7 @@
   .mainInfo{
     display: flex;
     flex-direction: row;
-    padding-top: 30px;
+    padding-top: 20px;
     width:60%;
     margin-left: 20%;
     .a{

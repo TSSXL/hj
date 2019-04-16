@@ -10,7 +10,8 @@
     </span>
       <span>
       <img src="../img/psd.png" alt="">
-      <input type="text" v-model="psd" placeholder="请输入密码">
+      <input :type="type"  v-model="psd" placeholder="请输入密码" >
+        <img style="margin-left: -5%;cursor: pointer" src="../img/eye.svg"  @click="showPsd">
     </span>
       <button style="cursor: pointer" @click="Login">登录</button>
       <div class="handle">
@@ -28,77 +29,26 @@
     name: 'Login',
     data () {
       return {
+        type:'password',
         number:'',
         psd:''
       }
     },
     methods:{
+      showPsd(){
+        this.type='text'
+      },
       //点击登录
       Login(){
         let Re= /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/
         let email=/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g
         //手机登录
         if(Re.test(this.number)&&this.psd!=="") {
-          this.$http
-            .post("/api/User/Register",
-              qs.stringify({
-                Phone:this.number,
-                Pwd:this.psd,
-                Code:1234,
-                Lng:0,
-                Lat:0,
-                Id:"string"
-              }))
-            .then(
-              function (response) {
-                if(response.data.Status===1)
-                {
-                  this.$message("登录成功")
-                  this.$router.go(-1)
-                }
-              }.bind(this)
-            )
-            .catch(
-              function (error) {
-                this.$notify.error({
-                  title: "注册失败",
-                  message: "您输入的信息有误",
-                });
-              }.bind(this)
-            )
+         this.getLogin(1)
         }
         //邮箱登录
         else if(email.test(this.number)&&this.psd!=="") {
-          this.$http
-            .post("/api/Login/ComLogin",
-              qs.stringify({
-                Name: this.number,
-                Password: md5(this.psd)
-              })
-            )
-            .then(
-              function (response) {
-                if(response.data.Status===1)
-                {
-                  //后台获取token存到本地和store中
-                  //存到local中是为了防止页面刷新state中数据变为undefined请求发不出去
-                  localStorage.setItem('token', response.data.Result)
-                  this.$store.state.token = response.data.Result
-                  this.$message('登录成功')
-                  this.$router.go(-1)
-                }else{
-                  this.$message(response.data.Result)
-                }
-              }.bind(this)
-            )
-            .catch(
-              function (error) {
-                this.$notify.error({
-                  title: "登录失败",
-                  message: "请重新输入",
-                });
-              }.bind(this)
-            )
+         this.getLogin(0)
         }
         //如果不满足手机登录或者邮箱登录
         else{
@@ -107,6 +57,39 @@
             message: "请重新输入账号和密码",
           })
         }
+      },
+      getLogin(type){
+        this.$http
+          .post("/api/Login/ComLogin",
+            qs.stringify({
+              Name: this.number,
+              Password: md5(this.psd),
+              type:type
+            })
+          )
+          .then(
+            function (response) {
+              if(response.data.Status===1)
+              {
+                //后台获取token存到本地和store中
+                //存到local中是为了防止页面刷新state中数据变为undefined请求发不出去
+                localStorage.setItem('token', response.data.Result)
+                this.$store.state.token = response.data.Result
+                this.$message('登录成功')
+                this.$router.push({path:'/'})
+              }else{
+                this.$message(response.data.Result)
+              }
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.$notify.error({
+                title: "登录失败",
+                message: "请重新输入",
+              });
+            }.bind(this)
+          )
       },
       //跳转到忘记密码页面
       gotoForget(){

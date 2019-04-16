@@ -6,15 +6,16 @@
     <div class="form">
       <span>
     <img src="../img/phone.png" alt="">
-      <input type="text" v-model="number">
+      <input type="text" v-model="number" disabled>
     </span>
       <span>
  <img src="../img/psd.png" alt="">
-      <input type="text" v-model="psd" placeholder="请输入密码">
+      <input :type="type" v-model="psd" placeholder="请输入密码">
+        <img style="margin-left: -5%;cursor: pointer" src="../img/eye.svg"  @click="showPsd">
     </span>
       <span>
    <img src="../img/yzm.png" alt="">
-      <input class="yzm" v-model="word" type="text" >
+      <input class="yzm" v-model="word" type="text" disabled>
     </span>
       <button @click="Login" style="cursor: pointer">重置密码</button>
     </div>
@@ -28,6 +29,7 @@
     name: 'forget',
     data () {
       return {
+        type:'password',
         number:'',
         psd:'',
         word:''
@@ -38,39 +40,80 @@
       this.word=this.$route.query.code
     },
     methods:{
+      showPsd(){
+        this.type='text'
+      },
       //点击登录
       Login(){
-        this.$http
-          .get("/api/Login/ChangePwdNext", {
-            params:{
-              Uname:this.number,
-              NewPwd:md5(this.psd)
-            }
-          })
-          .then(
-            function (response) {
-              if(response.data.Status===1)
-              {
-                localStorage.setItem('token', response.data.Result)
-                this.$store.state.token = response.data.Result
-                this.$message("修改成功")
-                this.$router.push({path:'/'})
-              }else{
-                this.$notify.error({
-                  title: "出错啦",
-                  message: "请通知后台",
-                });
+        let Re= /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/
+        if(Re.test(this.number) && this.psd!=='')
+        {
+          this.$http
+            .get("/api/Login/ChangePwdNext", {
+              params:{
+                Token:this.$route.query.token,
+                NewPwd:md5(this.psd),
+                type:1
               }
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              this.$notify.error({
-                title: "修改失败",
-                message: "您输入的信息有误",
-              });
-            }.bind(this)
-          )
+            })
+            .then(
+              function (response) {
+                if(response.data.Status===1)
+                {
+                  localStorage.setItem('token', response.data.Result)
+                  this.$store.state.token = response.data.Result
+                  this.$message("修改成功")
+                  this.$router.push({path:'/'})
+                }else{
+                  this.$notify.error({
+                    title: "出错啦",
+                    message: "请通知后台",
+                  });
+                }
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "修改失败",
+                  message: "您输入的信息有误",
+                });
+              }.bind(this)
+            )
+        }else{
+          this.$http
+            .get("/api/Login/ChangePwdNext", {
+              params:{
+                Token:this.$route.query.token,
+                NewPwd:md5(this.psd),
+                type:0
+              }
+            })
+            .then(
+              function (response) {
+                if(response.data.Status===1)
+                {
+                  localStorage.setItem('token', response.data.Result)
+                  this.$store.state.token = response.data.Result
+                  this.$message("修改成功")
+                  this.$router.push({path:'/'})
+                }else{
+                  this.$notify.error({
+                    title: "出错啦",
+                    message: "请通知后台",
+                  });
+                }
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "修改失败",
+                  message: "您输入的信息有误",
+                });
+              }.bind(this)
+            )
+        }
       }
     }
   }
@@ -114,6 +157,7 @@
           font-size: 1.5em;
           border: none;
           border-bottom: 1px solid #A8A8AA;
+          background-color: white;
         }
         img{
           height:29px;

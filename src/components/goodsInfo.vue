@@ -85,7 +85,7 @@
       components:{LogoComponent,FootComponent},
       created(){
         this.getNav()
-        if(this.$store.state.token!=='' ||localStorage.getItem('token')!=='')
+        if(this.$store.state.token!=='' ||localStorage.getItem('token')!==null)
         {
           this.isShow=true
          this.getGoodsInfoToken(this.$route.query.ID,this.$store.state.token || localStorage.getItem('token'))
@@ -104,7 +104,7 @@
           {
             if(ID===this.$route.query.ClassID)
             {
-              return {color:'#33647F'}
+              return {color:'#33647F',borderTop:'2px solid #33647F'}
             }
           },
         //跳转到商品详情
@@ -213,7 +213,7 @@
         },
         //添加到购物车
         addCar(){
-          if(this.getCookie('token')===null)
+          if(this.$store.state.token===''&&localStorage.getItem('token')===null)
           {
             this.$message("请先登录")
             this.$router.push({path:'/login'})
