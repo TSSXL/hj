@@ -7,21 +7,33 @@
       <!--商品名称-->
       <div class="goodsMsg">
        <div class="left">
-         <video class="video" autoplay="autoplay" controls v-if="goodInfo.image&&goodInfo.image.VideoPath.length>0">
-           <source :src="goodInfo.image&&goodInfo.image.VideoPath[0]"  type="video/mp4">
+         <video class="video" autoplay="autoplay" controls v-if="isShowVideo">
+           <source :src="videoUrl"  type="video/mp4">
          </video>
-         <img  :src="goodInfo.image&&goodInfo.image.ImagePath[0]" alt="加载中" v-else >
-          <div class="lb">
-            <img src="../img/left.png" >
-
-              <ul id="images" >
+         <img  :src="imgUrl" alt="加载中" v-else >
+         <!--商品有小视频-->
+          <div class="lb" v-if="goodInfo.image&&goodInfo.image.VideoPath.length>0">
+            <img class="leftA" src="../img/left.png" @click="leftImage">
+            <video class="littleVideo"    @click="playVideo">
+              <source :src="videoUrl"  type="video/mp4" >
+            </video>
+              <ul>
                   <li v-for="item in sImg">
-                    <img @click="big" :src="item" alt="加载中">
+                    <img  :src="item" alt="加载中" @click="showImg(item)">
                   </li>
                   </ul>
-
-            <img src="../img/right.png" >
+            <img class="rightA" src="../img/right.png" @click="rightImage">
           </div>
+         <!--商品无小视频-->
+         <div class="lb" v-else>
+           <img class="leftA" src="../img/left.png" @click="leftImage">
+           <ul style="width:70%;">
+             <li v-for="item in sImg">
+               <img  :src="item" alt="加载中" @click="showImg(item)">
+             </li>
+           </ul>
+           <img class="rightA" src="../img/right.png" @click="rightImage">
+       </div>
        </div>
         <div class="right">
           <p>{{goodInfo.Name}}</p>
@@ -59,11 +71,13 @@
 <script>
   import LogoComponent from './hd'
   import FootComponent from './foot'
-  import Viewer from 'viewerjs'
     export default {
         name: "goodsInfo",
       data(){
           return{
+            isShowVideo:false,
+            imgUrl:'',
+            videoUrl:'',
             style:{
               marginTop:'0'
             },
@@ -80,6 +94,9 @@
             },
             sImg:[],
             PageIndex:1,
+            PageCount:'',
+            imageIndex:1,
+            imageCount:''
           }
       },
       components:{LogoComponent,FootComponent},
@@ -95,13 +112,36 @@
         }
       },
       methods:{
-        big(){
-          const viewer=new Viewer(document.getElementById("images"), {
-            inline: false
-          })
-        },
-          ColorStyle(ID)
+        leftImage(){
+          if(--this.imageIndex<=0)
           {
+            this.imageIndex=1
+            this.$message("已经到头啦")
+            this.getGoodsImage(this.imageIndex,this.goodInfo.ProID)
+          }else{
+            this.getGoodsImage(this.imageIndex--,this.goodInfo.ProID)
+          }
+        },
+        rightImage(){
+         if(++this.imageIndex>=this.imageCount)
+         {
+           this.imageIndex=this.imageCount
+           this.getGoodsImage(this.imageIndex,this.goodInfo.ProID)
+         }else{
+           this.getGoodsImage(++this.imageIndex,this.goodInfo.ProID)
+         }
+        },
+        //当商品有小视频的时候
+        playVideo(){
+        this.isShowVideo=true
+        },
+        //商品图片展示
+        showImg(item){
+          this.isShowVideo=false
+          this.imgUrl=item
+        },
+        //导航栏头部
+          ColorStyle(ID) {
             if(ID===this.$route.query.ClassID)
             {
               return {color:'#33647F',borderTop:'2px solid #33647F'}
@@ -113,7 +153,7 @@
           this.getTj(1,ClassID,ID)
         },
           //获取推荐商品
-          getTj(PageIndex,ID,id){
+          getTj(PageIndex,ID,id) {
             this.$http
               .get("/api/Shopping/ShowTenList",{
                 params:{
@@ -125,6 +165,7 @@
               .then(
                 function (response) {
                   this.tjList=response.data.Result.data
+                  this.PageCount=response.data.Result.PageCount
                 }.bind(this)
               )
               .catch(
@@ -147,12 +188,14 @@
             .then(
               function (response) {
               this.goodInfo=response.data.Result[0]
-                if(this.goodInfo.image.ImagePath.length>=3)
-                {
-                  this.sImg=this.goodInfo.image.ImagePath.slice(0,3)
+                if(this.goodInfo.image.VideoPath.length>0){
+                  this.isShowVideo=true
+                  this.videoUrl=this.goodInfo.image.VideoPath[0]
                 }else{
-                  this.sImg=this.goodInfo.image.ImagePath
+                  this.isShowVideo=false
+                  this.imgUrl=this.goodInfo.image.ImagePath[0]
                 }
+                this.getGoodsImage(this.imageIndex,this.goodInfo.ProID)
               }.bind(this)
             )
             .catch(
@@ -176,12 +219,15 @@
             .then(
               function (response) {
                 this.goodInfo=response.data.Result[0]
-                if(this.goodInfo.image.ImagePath.length>=3)
-                {
-                  this.sImg=this.goodInfo.image.ImagePath.slice(0,3)
+                //如果商品有小视频则先展示小视频
+                if(this.goodInfo.image.VideoPath.length>0){
+                  this.isShowVideo=true
+                  this.videoUrl=this.goodInfo.image.VideoPath[0]
                 }else{
-                  this.sImg=this.goodInfo.image.ImagePath
+                  this.isShowVideo=false
+                  this.imgUrl=this.goodInfo.image.ImagePath[0]
                 }
+           this.getGoodsImage(this.imageIndex,this.goodInfo.ProID)
               }.bind(this)
             )
             .catch(
@@ -211,18 +257,42 @@
               }.bind(this)
             )
         },
+        //获取商品图片
+        getGoodsImage(pageIndex,ID){
+          this.$http
+            .get("/api/Shopping/ShowThreeList",{
+              params:{
+                  PageIndex:pageIndex,
+                ID:ID
+              }
+            })
+            .then(
+              function (response) {
+              this.sImg=response.data.Result.image[0]
+                this.imageCount=response.data.Result.PageCount
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "错误",
+                  message: "获取图片失败",
+                });
+              }.bind(this)
+            )
+        },
         //添加到购物车
         addCar(){
           if(this.$store.state.token===''&&localStorage.getItem('token')===null)
           {
             this.$message("请先登录")
-            this.$router.push({path:'/login'})
+            this.$router.push({path:'/login',query:{url:this.$route.fullPath}})
           }else{
             this.$http
               .get("/api/Shopping/ShoppingAdd",{
                 params:{
                   token:this.$store.state.token || localStorage.getItem('token'),
-                  ProName:this.goodInfo.Name,
+                  ProID:this.goodInfo.ProID,
                   Count:1
                 }
               })
@@ -245,13 +315,22 @@
         goLeft(){
             if(--this.PageIndex<=0)
             {
-              this.getTj(1,this.$route.query.ClassID,this.$route.query.ID)
+              this.PageIndex=1
+              this.$message("别点啦，已经到头啦")
+              this.getTj(this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
             }else{
-              this.getTj(--this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
+              this.getTj(this.PageIndex--,this.$route.query.ClassID,this.$route.query.ID)
             }
           },
         goRight(){
-          this.getTj(++this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
+          if(++this.PageIndex>=this.PageCount)
+          {
+            this.PageIndex=this.PageCount
+            this.getTj(this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
+          }else{
+            this.getTj(++this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
+          }
+
         },
         handle(index,ID){
           if(index===0)
@@ -270,11 +349,10 @@
     .nav{
       list-style: none;
       height:100px;
-      margin-left: 3.2%;
       margin-top: 0;
       li{
         float: left;
-        width:15%;
+        width:20%;
         height:100%;
         font-size: 2.5em;
         font-weight: bolder;
@@ -285,7 +363,7 @@
         cursor: pointer;
       }
       li:first-child{
-        margin-left:8%;
+        margin-left:10%;
       }
     }
     .goodsMsg{
@@ -313,28 +391,33 @@
           margin-top: 5%;
           display: flex;
           flex-direction: row;
-          img{
+          .leftA,.rightA{
             height:30px;
             width:30px;
-            margin-top: 9%;
+            margin-top: 7%;
           }
-          img:first-child{
-            margin-left: 7%;
+          .leftA{
+            margin-left: 3%;
           }
           img:hover{
             cursor: pointer;
           }
+          .littleVideo{
+            height:60px;
+            width:60px;
+            margin-top: 12px;
+            margin-left: 5%;
+          }
           ul{
-            display: inline-block;
-            height:100%;
-            width:68%;
+            height:60%;
             list-style: none;
-            margin-left: -10%;
+            width:56%;
+            -webkit-padding-start: 0px;
             li{
               float: left;
-             width:30%;
-              height:70%;
-              margin-left: 2%;
+              width:26%;
+              height:100%;
+              margin-left: 6%;
               img{
                 width:100%;
                 height:100%;
@@ -436,6 +519,7 @@
               margin-top: 0;
               color:#777777;
               font-size: 1.6em;
+              text-align: center;
             }
             p:last-child{
               margin-top: -12px;
@@ -466,8 +550,11 @@
    .goodsMsg{
      .left{
        .lb{
-         img:first-child{
-           margin-left: 5%;
+        .leftA{
+        margin-left: 0;
+      }
+         ul{
+           width:60%;
          }
        }
      }

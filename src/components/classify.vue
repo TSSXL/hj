@@ -8,6 +8,7 @@
         <ul>
           <li v-for="item in list" >
             <img  @click="goods(item.ID,item.ClassID)"   :src="item.image.ImagePath[0]" >
+            <hr>
             <p>{{item.Name}}</p>
             <p class="price" :style="PriceStyle">￥{{item.Price}}</p>
             <span>会员价￥{{item.DisPrice}}</span>
@@ -44,7 +45,13 @@
             textDecoration:'line-through'
           }
           this.getGoodsToken(this.$route.query.ID,this.$store.state.token || localStorage.getItem('token'))
-        }else if(this.$store.state.token===''){
+        }else if(this.$route.query.ID!==undefined &&localStorage.getItem('token')!==null){
+          this.PriceStyle={
+            textDecoration:'line-through'
+          }
+          this.getGoodsToken(this.$route.query.ID,this.$store.state.token || localStorage.getItem('token'))
+        }
+        else if(this.$store.state.token===''){
          this.getGoods(this.$route.query.ID)
         }else{
           this.$message("您还未登录")
@@ -154,11 +161,10 @@
   .nav{
     list-style: none;
     height:100px;
-    margin-left: 2%;
     margin-top: 0;
     li{
       float: left;
-      width:15%;
+      width:20%;
       height:100%;
       font-size: 2.5em;
       font-weight: bolder;
@@ -169,7 +175,7 @@
       cursor: pointer;
     }
     li:first-child{
-      margin-left:8%;
+      margin-left:10%;
     }
   }
   .classGoods{
@@ -183,18 +189,18 @@
      li{
        float: left;
        width:20%;
-       height:340px;
+       height:320px;
        margin-left: 8%;
        margin-top: 2%;
        border-radius: 10px;
        background:rgba(255,255,255,1);
-       box-shadow:5px 2px 5px 3px rgba(43,43,43,0.14);
+       box-shadow:0px 1px 5px 0px rgba(43,43,43,0.14);
        p{
          font-size: 2em;
          text-align: left;
          margin-left: 10%;
          width:80%;
-         margin-top: 0;
+         margin-top: 0px;
        }
        .price{
          color:#787878;
@@ -202,8 +208,6 @@
        img{
          height:220px;
          width:80%;
-         margin-top: 6%;
-         padding-bottom: 20px;
        }
        img:hover{
          cursor: pointer;
@@ -227,7 +231,7 @@
         margin-left: 0;
         li{
           width:18%;
-          height:320px;
+          height:300px;
           margin-left: 10%;
           img{
             height:200px;
@@ -258,8 +262,10 @@
     .classGoods{
       ul{
         li{
+          height:280px;
           p{
             font-size: 1.8em;
+            margin-top: -5px;
           }
           span{
             font-size: 1.7em;
@@ -273,6 +279,7 @@
     .classGoods{
       ul{
         li{
+          height:270px;
           span{
             font-size: 1.6em;
             margin-top: -3.2%;
@@ -291,7 +298,7 @@
       ul{
         li{
           width:23%;
-          height:260px;
+          height:240px;
           margin-top: 4%;
           margin-left: 5.5%;
           img{

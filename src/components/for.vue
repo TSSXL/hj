@@ -138,7 +138,7 @@
                 }else{
                   this.$notify.error({
                     title: "出错啦",
-                    message: "请通知后台",
+                    message: "验证码错误",
                   });
                 }
               }.bind(this)

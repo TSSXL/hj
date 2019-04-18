@@ -6,7 +6,7 @@
         <li v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="select===index?colorStyle:''">{{item.Name}}</li>
       </ul>
       <!--轮播图-->
-      <el-carousel height="450px">
+      <el-carousel height="550px">
         <el-carousel-item v-for="item in imgList" :key="item" >
           <img :src="item" alt="" style="width:100%;height:100%;">
         </el-carousel-item>
@@ -17,6 +17,7 @@
         <ul class="containUl">
           <li v-for="j in item.Context">
             <img  @click="goods(j.ID,j.ClassID)" :src="j.image.ImagePath&&j.image.ImagePath[0]"  alt="正在加载中">
+            <hr>
             <p>{{j.Name}}</p>
             <p class="price" :style="PriceStyle">￥{{j.Price}}</p>
            <span>会员价￥{{j.DisPrice}}</span>
@@ -177,10 +178,9 @@
      list-style: none;
      height:100px;
      margin-top: 0;
-     margin-left: 2%;
      li{
        float: left;
-       width:15%;
+       width:20%;
        height:100%;
        font-size: 2.5em;
        font-weight: bolder;
@@ -191,7 +191,7 @@
        cursor: pointer;
      }
      li:first-child{
-       margin-left:8%;
+       margin-left:10%;
      }
    }
    .container{
@@ -222,7 +222,7 @@
        li{
          float: left;
          width:19%;
-         height:390px;
+         height:380px;
          margin-left: 8%;
          margin-top: 2%;
          border-radius: 10px;
@@ -242,8 +242,7 @@
          img{
            height:280px;
            width:80%;
-           margin-top: 6%;
-           padding-bottom: 10px;
+           margin-top: 0%;
          }
          img:hover{
            cursor: pointer;
@@ -272,10 +271,10 @@
           height:300px;
           img{
             height:200px;
-            padding-bottom: 20px;
+            padding-bottom: 10px;
           }
           p{
-            margin-top: -10px;
+            margin-top: 5px;
           }
           span{
             margin-top: -2.7%;
@@ -296,11 +295,10 @@
            height:260px;
            img{
              height:170px;
-             padding-bottom: 20px;
            }
            p{
-             margin-top: -10px;
              font-size: 1.8em;
+             margin-top: -2px;
            }
            span{
              font-size: 1.8em;
@@ -330,9 +328,9 @@
        }
        .containUl{
          li{
-           height:200px;
+           height:240px;
            img{
-             height:140px;
+             height:160px;
              padding-bottom: 10px;
            }
            p{
@@ -360,7 +358,7 @@
        }
        .containUl{
          li{
-           height:180px;
+           height:200px;
            img{
              height:120px;
              padding-bottom: 15px;

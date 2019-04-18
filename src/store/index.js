@@ -8,7 +8,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   // state 所有的状态（组件公用的数据）不能直接使用
   state: {
-    token: ''
+    token: '',
+    imageStart:0,
+    imageEnd:3
   }
 })
 

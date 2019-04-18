@@ -1,9 +1,6 @@
 <template>
   <div class="mine">
     <Logo-Component></Logo-Component>
-    <ul class="nav">
-      <li  v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" >{{item.Name}}</li>
-    </ul>
     <div class="content">
       <p>我的购物车</p>
       <ul>
@@ -16,9 +13,9 @@
             <p>￥{{item.DisPrice}}</p>
           </span>
           <span class="num">
-          <img src="../img/cut.png" @click="cutNum(item.Count,item.Name)">
+          <img src="../img/cut.png" @click="cutNum(item.Count,item.ID)">
           <span>{{ item.Count}}</span>
-            <img src="../img/add.png" @click="addNum(item.Count,item.Name)">
+            <img src="../img/add.png" @click="addNum(item.Count,item.ID)">
           </span>
            <span class="del" @click="del(item.ID)">删除</span>
         </li>
@@ -26,6 +23,7 @@
     </div>
       <div class="checkAll" :style="delAllStyle">
         <el-checkbox class="c" @change="selectAll"></el-checkbox>
+         <span class="selectAll">全选</span>
         <span @click="delAll">删除</span>
     </div>
     <div class="allPrice">总价:{{data.NewTotal}}</div>
@@ -45,16 +43,12 @@
         checkCity:[],
         chose:'',
         PriceStyle:{},
-        navList:[
-          {ID:"0",Name:"首页"}
-        ],
         data:{},
         product:[],
       }
     },
     components:{LogoComponent,FootComponent},
     created(){
-      this.getNav()
       if(this.$store.state.token!=='' || localStorage.getItem('token')!==null)
       {
         this.PriceStyle={
@@ -136,15 +130,15 @@
           )
       },
       //减少商品数量
-      cutNum(val,name){
-        if(val===0){
-        this.$message("数量为0，您可以选择删除")
+      cutNum(val,ID){
+        if(val===1){
+        this.del(ID)
         }else{
           this.$http
             .get("/api/Shopping/ShoppingAlter",{
               params:{
                 token:this.$store.state.token || localStorage.getItem('token'),
-                ProName:name,
+                ProID:ID,
                 Count:--val
               }
             })
@@ -165,12 +159,12 @@
         }
     },
       //增加商品数量
-      addNum(val,name){
+      addNum(val,ID){
         this.$http
           .get("/api/Shopping/ShoppingAlter",{
             params:{
               token:this.$store.state.token || localStorage.getItem('token'),
-              ProName:name,
+              ProID:ID,
               Count:++val
             }
           })
@@ -192,8 +186,6 @@
       },
       //删除商品
       del(ID){
-        if(this.chose===true)
-        {
           this.$http
             .get("/api/Shopping/ShoppingDel",{
               params:{
@@ -216,41 +208,12 @@
                 });
               }.bind(this)
             )
-        }else{
-          this.$message("请选中此商品再删除")
-        }
-      },
-      //获取导航栏
-      getNav(){
-        this.$http
-          .post("/api/Shopping/ReturnList")
-          .then(
-            function (response) {
-              this.navList=this.navList.concat(response.data.Result)
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              this.$notify.error({
-                title: "错误",
-                message: "请通知后台",
-              });
-            }.bind(this)
-          )
+
       },
       //点击商品进入商品详情
       goods(ID,ClassID){
         this.$router.push({path:'/goodsInfo',query:{ID:ID,ClassID:ClassID}})
       },
-      //点击导航栏跳转
-      handle(index,ID){
-        if(index===0)
-        {
-          this.$router.push('/')
-        }else{
-          this.$router.push({path:'/classify',query:{id:index,ID:ID}})
-        }
-      }
     }
   }
 </script>
@@ -258,27 +221,6 @@
 <style lang="scss" scoped>
   .mine{
     width:100%;
-    .nav{
-      list-style: none;
-      height:100px;
-      margin-left: 2%;
-      margin-top: 0;
-      li{
-        float: left;
-        width:15%;
-        height:100%;
-        font-size: 2.5em;
-        font-weight: bolder;
-        line-height:100px;
-        color:#919191;
-      }
-      li:hover{
-        cursor: pointer;
-      }
-      li:first-child{
-        margin-left:8%;
-      }
-    }
     .content{
       display: inline-block;
       width:100%;
@@ -289,7 +231,6 @@
         font-weight: bolder;
         margin-left: -59%;
         margin-top: 5%;
-        color:#33647F;
       }
       ul{
         width:80%;
@@ -404,6 +345,12 @@
         top:53%;
         cursor: pointer;
       }
+      .selectAll{
+        left: 0;
+        margin-left: -33.5%;
+        font-size: 1.8em;
+        font-weight: bolder;
+      }
     }
     .allPrice{
       width:100%;
@@ -466,6 +413,9 @@
         }
         span{
           right:23%;
+        }
+        .selectAll{
+          margin-left: -32.5%;
         }
       }
     }

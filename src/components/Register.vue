@@ -165,7 +165,7 @@ export default {
                         this.$message("注册成功")
                         this.$router.push({path:'/'})
                       }else{
-                        this.$message("该邮箱已被注册,即将跳转到登录页面")
+                        this.$message("该手机号已被注册,即将跳转到登录页面")
                         this.$router.push({path:'/login'})
                       }
                     }.bind(this)

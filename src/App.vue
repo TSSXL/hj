@@ -22,8 +22,8 @@ export default {
     margin-left: 20px !important;
   }
   .el-checkbox__inner::after{
-    height: 18px;
-    left: 13px;
+    height: 18px !important;
+    left: 13px !important;
   }
   .avatar-uploader .el-upload {
     border: 1px solid #d9d9d9;

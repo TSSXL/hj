@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import $ from 'jquery'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import VueVideoPlayer from 'vue-video-player';
@@ -15,7 +16,7 @@ import store from './store/index'
 import axios from 'axios'
 Vue.prototype.$http = axios;
 
-axios.defaults.baseURL="http://192.168.1.105/HMC"
+axios.defaults.baseURL="http://hmc.nbxuanma.com"
 
 Vue.use(ElementUI);
 Vue.use(VueVideoPlayer)

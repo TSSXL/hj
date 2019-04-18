@@ -76,7 +76,12 @@
                 localStorage.setItem('token', response.data.Result)
                 this.$store.state.token = response.data.Result
                 this.$message('登录成功')
-                this.$router.push({path:'/'})
+                if(this.$route.query.url!==undefined)
+                {
+                  this.$router.go(-1)
+                }else{
+                  this.$router.push({path:'/'})
+                }
               }else{
                 this.$message(response.data.Result)
               }

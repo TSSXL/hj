@@ -1,9 +1,6 @@
 <template>
   <div class="mine">
     <Logo-Component></Logo-Component>
-    <ul class="nav">
-      <li  v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" >{{item.Name}}</li>
-    </ul>
     <div class="content">
       <p>个人中心</p>
     <div class="main">
@@ -20,7 +17,7 @@
       </div>
       <div class="mainItem">
         <span>登录账号:</span>
-        <span style="width:50%;">{{info.Account}}</span>
+        <span style="width:55%;">{{info.Account}}</span>
       </div>
       <div class="mainItem">
         <span>会员等级:</span>
@@ -87,14 +84,10 @@
         action:'',
         dialogVisible:false,
         dialogVisibleTwo:false,
-        navList:[
-          {ID:"0",Name:"首页"}
-        ],
       }
     },
     components:{LogoComponent,FootComponent},
     created(){
-      this.getNav()
       if(this.$store.state.token!=='' || localStorage.getItem('token')!==null)
       {
         this.getInfo(this.$store.state.token || localStorage.getItem('token'))
@@ -105,8 +98,8 @@
 
     },
     beforeMount(){
-      this.actionUser='http://192.168.1.105/HMC/api/Login/UpdateForImage?type=0'
-      this.action='http://192.168.1.105/HMC/api/Login/UpdateForImage?type=1'
+      this.actionUser='http://hmc.nbxuanma.com/api/Login/UpdateForImage?type=0'
+      this.action='http://hmc.nbxuanma.com/api/Login/UpdateForImage?type=1'
     },
     methods:{
       //修改个人信息
@@ -171,43 +164,17 @@
           .then(
             function (response) {
             this.info=response.data.Result
+            this.info.UserImage='http://hmc.nbxuanma.com'+response.data.Result.UserImage
             }.bind(this)
           )
           .catch(
             function (error) {
               this.$notify.error({
                 title: "错误",
-                message: "您还未登录",
+                message: "后台出错",
               });
             }.bind(this)
           )
-      },
-      //获取导航栏
-      getNav(){
-        this.$http
-          .post("/api/Shopping/ReturnList")
-          .then(
-            function (response) {
-              this.navList=this.navList.concat(response.data.Result)
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              this.$notify.error({
-                title: "错误",
-                message: "请通知后台",
-              });
-            }.bind(this)
-          )
-      },
-      //导航栏
-      handle(index,ID){
-        if(index===0)
-        {
-          this.$router.push('/')
-        }else{
-          this.$router.push({path:'/classify',query:{id:index,ID:ID}})
-        }
       },
       //点击认证
       Dialog(){
@@ -218,30 +185,39 @@
       },
       //弹框点击提交
       tj(){
-        this.dialogVisible=false
-        this.$http
-          .get("/api/Login/MembershipCertification",{
-            params:{
-             token:this.$store.state.token || localStorage.getItem('token'),
-              VipName:this.VipName,
-              IDCard:this.IDCard,
-              Image:this.yyImage
-            }
-          })
-          .then(
-            function (response) {
-                 this.dialogVisibleTwo=true
-                this.$message(response.data.Result)
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              this.$notify.error({
-                title: "错误",
-                message: "请将信息填写完整",
-              });
-            }.bind(this)
-          )
+        if(this.yyImage===''||this.VipName==='' ||this.IDCard==='')
+        {
+          this.$message("请将信息填写完整")
+        }else{
+          this.dialogVisible=false
+          this.$http
+            .get("/api/Login/MembershipCertification",{
+              params:{
+                token:this.$store.state.token || localStorage.getItem('token'),
+                VipName:this.VipName,
+                IDCard:this.IDCard,
+                Image:this.yyImage
+              }
+            })
+            .then(
+              function (response) {
+                if(response.data.Result==="格式正确")
+                {
+                  this.dialogVisibleTwo=true
+                }else{
+                  this.$message(response.data.Result)
+                }
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                this.$notify.error({
+                  title: "错误",
+                  message: "请将信息填写完整",
+                });
+              }.bind(this)
+            )
+        }
       },
       //上传前
       handlePictureCardPreview(file) {
@@ -264,27 +240,6 @@
 <style lang="scss" scoped>
   .mine{
     width:100%;
-    .nav{
-      list-style: none;
-      height:100px;
-      margin-left: 2%;
-      margin-top: 0;
-      li{
-        float: left;
-        width:15%;
-        height:100%;
-        font-size: 2.5em;
-        font-weight: bolder;
-        line-height:100px;
-        color:#919191;
-      }
-      li:hover{
-        cursor: pointer;
-      }
-      li:first-child{
-        margin-left:8%;
-      }
-    }
     .content{
       display: inline-block;
       width:100%;
@@ -294,14 +249,13 @@
         color:#33647F;
         font-size: 2.5em;
         font-weight: bolder;
-        margin-left: -33%;
+        margin-left: -44%;
         margin-top: 5%;
-        color:#33647F;
       }
       .main{
         width:50%;
         display: flex;
-        margin-left: 31%;
+        margin-left: 25.5%;
         flex-direction: column;
         padding-bottom: 80px;
         .mainItem{
@@ -342,11 +296,8 @@
     }
     @media only screen and (max-width: 1440px){
       .content{
-        p{
-          margin-left: -32%;
-        }
       .main{
-        margin-left: 30.8%;
+        margin-left: 25%;
         .mainItem{
           span{
             width:20%;
@@ -361,18 +312,11 @@
         }
       }
     }
-    @media only screen and (max-width: 1280px){
-      .content{
-        .main{
-          margin-left: 30.5%;
-        }
-      }
-    }
     @media only screen and (max-width: 1024px){
       .content{
-        .main{
-          margin-left: 29.5%;
-        }
+      p{
+        margin-left: -41.5%;
+      }
       }
     }
   }

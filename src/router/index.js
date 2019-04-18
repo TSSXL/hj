@@ -66,5 +66,13 @@ export default new Router({
       name: 'For',
       component: For
     }
-  ]
+  ],
+  //解决页面跳转加载不在页面顶部的问题
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })
