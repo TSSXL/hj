@@ -7,20 +7,20 @@
       </ul>
       <!--轮播图-->
       <el-carousel height="550px">
-        <el-carousel-item v-for="item in imgList" :key="item" >
-          <img :src="item" alt="" style="width:100%;height:100%;">
+        <el-carousel-item v-for="(item,index) in imgList" :key="index" >
+          <img :src="item.Image" alt="" style="width:100%;height:100%;cursor: pointer" @click="goods(item.ProID,item.ClassID)">
         </el-carousel-item>
       </el-carousel>
       <!--商品分类内容-->
       <div class="container" v-for="item in list">
         <p class="l">{{item.Title}}</p>
         <ul class="containUl">
-          <li v-for="j in item.Context">
+          <li v-for="j in item.Content">
             <img  @click="goods(j.ID,j.ClassID)" :src="j.image.ImagePath&&j.image.ImagePath[0]"  alt="正在加载中">
             <hr>
             <p>{{j.Name}}</p>
             <p class="price" :style="PriceStyle">￥{{j.Price}}</p>
-           <span>会员价￥{{j.DisPrice}}</span>
+           <span>会员价￥{{j.VipPrice}}</span>
           </li>
         </ul>
       </div>
@@ -62,7 +62,8 @@
         else if(localStorage.getItem('token')!==null){
           this.$message("您还未登录")
           this.getGoodsToken(localStorage.getItem('token'))
-        }else{
+        }
+        else{
           this.$message("您还未登录")
           this.getGoods()
         }
@@ -71,15 +72,10 @@
           //获取轮播图
         getImg(){
           this.$http
-            .get("/api/Login/LBImage",{
-              params:{
-                lift:"0",
-                length:"3"
-              }
-            })
+            .get("/api/Login/LBImage")
             .then(
               function (response) {
-              this.imgList=response.data.Result.Image
+              this.imgList=response.data.Result
               }.bind(this)
             )
             .catch(
@@ -112,15 +108,10 @@
         //未登录获取商品
           getGoods(){
             this.$http
-              .get("/api/Shopping/ShowList",{
-                params:{
-                  PageIndex:1,
-                  PageSize:6
-                }
-              })
+              .get("/api/Shopping/ShowIndex")
               .then(
                 function (response) {
-                 this.list=response.data.Result.List
+                 this.list=response.data.Result
                 }.bind(this)
               )
               .catch(
@@ -135,22 +126,20 @@
         //登录之后获取商品
         getGoodsToken(token){
           this.$http
-            .get("/api/Shopping/ShowList",{
+            .get("/api/Shopping/ShowIndex",{
               params:{
-                PageIndex:1,
-                PageSize:6,
                 token:token
               }
             })
             .then(
               function (response) {
-                this.list=response.data.Result.List
+                this.list=response.data.Result
               }.bind(this)
             )
             .catch(
               function (error) {
                 this.$message("登录失效，请重新登录")
-                this.$router.push({path:'/login'})
+                // this.$router.push({path:'/login'})
               }.bind(this)
             )
         },
@@ -200,16 +189,6 @@
      display: inline-block;
      width:100%;
      background-color: #FCFCFC;
-     .l:after{
-       content: '';
-       display:inline-block;
-       height:2px;
-       width:50px;
-       background-color: #33647F;
-       position: absolute;
-       margin-top: 2%;
-       margin-left: -3.9%;
-     }
      p{
        font-size: 2.5em;
        font-weight: bolder;

@@ -42,8 +42,8 @@
           <el-input v-model="IDCard"></el-input>
         </el-form-item>
         <el-form-item label="营业执照:">
-          <el-upload v-model="yyImage" class="avatar-uploader" :limit="1" :action="action" :on-preview="handlePictureCardPreviewU"
-                     list-type="picture-card" :on-success="handleAvatarSuccessU" >
+          <el-upload ref="upload" v-model="yyImage" class="avatar-uploader" :limit="1" :action="action" :on-preview="handlePictureCardPreviewU"
+                     list-type="picture-card" :on-success="handleAvatarSuccessU"  >
             <i class="el-icon-plus"></i>
           </el-upload>
         </el-form-item>
@@ -185,6 +185,7 @@
       },
       //弹框点击提交
       tj(){
+        this.$refs.upload.clearFiles();
         if(this.yyImage===''||this.VipName==='' ||this.IDCard==='')
         {
           this.$message("请将信息填写完整")

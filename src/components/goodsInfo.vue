@@ -38,7 +38,7 @@
         <div class="right">
           <p>{{goodInfo.Name}}</p>
           <p>售价:￥{{goodInfo.Price}}</p>
-          <span>会员价:￥{{goodInfo.DisPrice}}</span>
+          <span>会员价:￥{{goodInfo.VipPrice}}</span>
           <p class="sp">商品简介<br>{{goodInfo.Brif}}</p>
              <img src="../img/car.png" alt="" @click="addCar" class="carImg">
           <el-button class="btn"  type="danger" @click="addCar">加入购物车</el-button>
@@ -53,7 +53,7 @@
             <li v-for="item in tjList">
               <img :src="item.image&&item.image[0]" @click="goods(item.ID,item.ClassID)" alt="加载中">
               <p>{{item.Name}}</p>
-              <p>会员价￥{{item.DisPrice}}</p>
+              <p>会员价￥{{item.VipPrice}}</p>
             </li>
           </ul>
           <img class="y" src="../img/y.png" alt="" @click="goRight">
@@ -105,7 +105,7 @@
         if(this.$store.state.token!=='' ||localStorage.getItem('token')!==null)
         {
           this.isShow=true
-         this.getGoodsInfoToken(this.$route.query.ID,this.$store.state.token || localStorage.getItem('token'))
+          this.getGoodsInfoToken(this.$route.query.ID,this.$store.state.token || localStorage.getItem('token'))
           this.getTj(this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
         }else{
           this.getGoodsInfo(this.$route.query.ID)

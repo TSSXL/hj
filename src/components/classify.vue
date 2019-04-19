@@ -11,7 +11,7 @@
             <hr>
             <p>{{item.Name}}</p>
             <p class="price" :style="PriceStyle">￥{{item.Price}}</p>
-            <span>会员价￥{{item.DisPrice}}</span>
+            <span>会员价￥{{item.VipPrice}}</span>
           </li>
         </ul>
       </div>
