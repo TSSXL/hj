@@ -134,7 +134,7 @@
                 if(response.data.Status===1)
                 {
                   this.$message("验证成功")
-                  this.$router.push({path:'/forget',query:{name:response.data.Result.name,code:response.data.Result.code,token:response.data.Result.token}})
+                  this.$router.push({path:'/forget',query:{name:response.data.Result.name,code:response.data.Result.code,token:response.data.Result.PCToken}})
                 }else{
                   this.$notify.error({
                     title: "出错啦",
@@ -166,7 +166,7 @@
                 if(response.data.Status===1)
                 {
                   this.$message("验证成功")
-                  this.$router.push({path:'/forget',query:{name:response.data.Result.name,code:response.data.Result.code,token:response.data.Result.token}})
+                  this.$router.push({path:'/forget',query:{name:response.data.Result.name,code:response.data.Result.code,token:response.data.Result.PCToken}})
                 }else{
                 this.$message(response.data.Result)
                 }

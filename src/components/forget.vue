@@ -38,6 +38,7 @@
     created(){
       this.number=this.$route.query.name
       this.word=this.$route.query.code
+      console.log(this.$route.query.token)
     },
     methods:{
       showPsd(){
@@ -53,15 +54,16 @@
               params:{
                 Token:this.$route.query.token,
                 NewPwd:md5(this.psd),
-                type:1
+                type:1,
+                PCorApp:"PC"
               }
             })
             .then(
               function (response) {
                 if(response.data.Status===1)
                 {
-                  localStorage.setItem('token', response.data.Result)
-                  this.$store.state.token = response.data.Result
+                  localStorage.setItem('token', response.data.Result.PCToken)
+                  this.$store.state.token = response.data.Result.PCToken
                   this.$message("修改成功")
                   this.$router.push({path:'/'})
                 }else{
@@ -86,15 +88,16 @@
               params:{
                 Token:this.$route.query.token,
                 NewPwd:md5(this.psd),
-                type:0
+                type:0,
+                PCorApp:"PC"
               }
             })
             .then(
               function (response) {
                 if(response.data.Status===1)
                 {
-                  localStorage.setItem('token', response.data.Result)
-                  this.$store.state.token = response.data.Result
+                  localStorage.setItem('token', response.data.Result.PCToken)
+                  this.$store.state.token = response.data.Result.PCToken
                   this.$message("修改成功")
                   this.$router.push({path:'/'})
                 }else{

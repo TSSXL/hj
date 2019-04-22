@@ -10,7 +10,7 @@
           <span class="info">
             <p>{{item.Name}}</p>
             <p :style="PriceStyle">￥{{item.Price}}</p>
-            <p>￥{{item.DisPrice}}</p>
+            <p>￥{{item.VipPrice}}</p>
           </span>
           <span class="num">
           <img src="../img/cut.png" @click="cutNum(item.Count,item.ID)">
@@ -82,7 +82,8 @@
             .get("/api/Shopping/ShoppingDel",{
               params:{
                 token:this.$store.state.token || localStorage.getItem('token'),
-                IDs:this.checkCity.join(";")
+                IDs:this.checkCity.join(";"),
+                PCorApp:"PC"
               }
             })
             .then(
@@ -109,7 +110,8 @@
       getShopCar(Token){
         this.$http
           .get("/api/Shopping/ShoppingListMsg",{params:{
-            Token:Token
+            Token:Token,
+              PCorApp:"PC"
             }})
           .then(
             function (response) {
@@ -139,7 +141,8 @@
               params:{
                 token:this.$store.state.token || localStorage.getItem('token'),
                 ProID:ID,
-                Count:--val
+                Count:--val,
+                PCorApp:"PC"
               }
             })
             .then(
@@ -165,7 +168,8 @@
             params:{
               token:this.$store.state.token || localStorage.getItem('token'),
               ProID:ID,
-              Count:++val
+              Count:++val,
+              PCorApp:"PC"
             }
           })
           .then(
@@ -190,7 +194,8 @@
             .get("/api/Shopping/ShoppingDel",{
               params:{
                 token:this.$store.state.token || localStorage.getItem('token'),
-                IDs:ID
+                IDs:ID,
+                PCorApp:"PC"
               }
             })
             .then(

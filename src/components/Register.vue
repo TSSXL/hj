@@ -160,8 +160,8 @@ export default {
                     function (response) {
                       if(response.data.Status===105)
                       {
-                        localStorage.setItem('token', response.data.Result)
-                        this.$store.state.token = response.data.Result
+                        localStorage.setItem('token', response.data.Result.PCToken)
+                        this.$store.state.token = response.data.Result.PCToken
                         this.$message("注册成功")
                         this.$router.push({path:'/'})
                       }else{
@@ -206,8 +206,8 @@ export default {
             function (response) {
               if(response.data.Status===1)
               {
-                localStorage.setItem('token', response.data.Result)
-                this.$store.state.token = response.data.Result
+                localStorage.setItem('token', response.data.Result.PCToken)
+                this.$store.state.token = response.data.Result.PCToken
                 this.$message("注册成功")
                 this.$router.push({path:'/'})
               }else if(response.data.Status===11)

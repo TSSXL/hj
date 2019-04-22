@@ -73,8 +73,8 @@
               {
                 //后台获取token存到本地和store中
                 //存到local中是为了防止页面刷新state中数据变为undefined请求发不出去
-                localStorage.setItem('token', response.data.Result)
-                this.$store.state.token = response.data.Result
+                localStorage.setItem('token', response.data.Result.PCToken)
+                this.$store.state.token = response.data.Result.PCToken
                 this.$message('登录成功')
                 if(this.$route.query.url!==undefined)
                 {

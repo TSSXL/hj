@@ -108,7 +108,11 @@
         //未登录获取商品
           getGoods(){
             this.$http
-              .get("/api/Shopping/ShowIndex")
+              .get("/api/Shopping/ShowIndex",{
+              params:{
+                PCorApp:"PC"
+              }
+            })
               .then(
                 function (response) {
                  this.list=response.data.Result
@@ -128,6 +132,7 @@
           this.$http
             .get("/api/Shopping/ShowIndex",{
               params:{
+                PCorApp:"PC",
                 token:token
               }
             })

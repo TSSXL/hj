@@ -92,7 +92,8 @@
            params:{
              PageIndex:1,
              PageSize:16,
-             Category:ID
+             Category:ID,
+             PCorApp:"PC"
            }
             })
             .then(
@@ -122,7 +123,8 @@
                 PageIndex:1,
                 PageSize:16,
                 Category:ID,
-                token:token
+                token:token,
+                PCorApp:"PC"
               }
             })
             .then(

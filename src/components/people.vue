@@ -111,7 +111,8 @@
               params:{
                 token:this.$store.state.token || localStorage.getItem('token'),
                 NickName:this.info.NickName,
-                Image:this.imageUrl
+                Image:this.imageUrl,
+                PCorApp:"PC"
               }
             })
             .then(
@@ -133,7 +134,8 @@
             .get("/api/Login/UpdateInformation",{
               params:{
                 token:this.$store.state.token || localStorage.getItem('token'),
-                NickName:this.info.NickName
+                NickName:this.info.NickName,
+                PCorApp:"PC"
               }
             })
             .then(
@@ -158,7 +160,8 @@
         this.$http
           .get("/api/Login/PersonnelInformation",{
             params:{
-              token:token
+              token:token,
+              PCorApp:"PC"
             }
           })
           .then(
@@ -197,7 +200,8 @@
                 token:this.$store.state.token || localStorage.getItem('token'),
                 VipName:this.VipName,
                 IDCard:this.IDCard,
-                Image:this.yyImage
+                Image:this.yyImage,
+                PCorApp:"PC"
               }
             })
             .then(

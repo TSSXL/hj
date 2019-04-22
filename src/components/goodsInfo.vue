@@ -182,7 +182,8 @@
           this.$http
             .get("/api/Shopping/ShoppingDetailById",{
               params:{
-                ID:ID
+                ID:ID,
+                PCorApp:"PC"
               }
             })
             .then(
@@ -213,7 +214,8 @@
             .get("/api/Shopping/ShoppingDetailById",{
               params:{
                 ID:ID,
-                token:token
+                token:token,
+                PCorApp:"PC"
               }
             })
             .then(
@@ -293,7 +295,8 @@
                 params:{
                   token:this.$store.state.token || localStorage.getItem('token'),
                   ProID:this.goodInfo.ProID,
-                  Count:1
+                  Count:1,
+                  PCorApp:"PC"
                 }
               })
               .then(

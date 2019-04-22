@@ -57,7 +57,8 @@
           this.$http
             .get("/api/Login/PersonnelInformation",{
               params:{
-                token:token
+                token:token,
+                PCorApp:"PC"
               }
             })
             .then(
@@ -174,7 +175,7 @@
        cursor: pointer;
      }
      .tc{
-       background-color: white;
+       background-color: #e6e6e6;
        margin-top: 9%;
        height:50px;
        width:18%;
@@ -215,6 +216,11 @@
       .rightT{
         width:45%;
       margin-left: 22%;
+        .tc{
+          width:19%;
+          margin-left: -41%;
+          height:45px;
+        }
       }
    }
    @media only screen and (max-width: 1366px){
