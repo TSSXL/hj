@@ -42,10 +42,18 @@
           <el-input v-model="IDCard"></el-input>
         </el-form-item>
         <el-form-item label="营业执照:">
-          <el-upload ref="upload" v-model="yyImage" class="avatar-uploader" :limit="1" :action="action" :on-preview="handlePictureCardPreviewU"
-                     list-type="picture-card" :on-success="handleAvatarSuccessU"  >
+          <el-upload
+            ref="upload"
+            class="avatar-uploader"
+            :action="action"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreviewU"
+            :on-success="handleAvatarSuccessU">
             <i class="el-icon-plus"></i>
           </el-upload>
+          <el-dialog :visible.sync="dialogVisibleU">
+            <img width="100%" :src="dialogImageUrl">
+          </el-dialog>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -56,8 +64,6 @@
     <!--提交认证-->
     <el-dialog
       :visible.sync="dialogVisibleTwo"
-      width="30%"
-      class="aaa"
       style="margin-top: 5%;"
     >
       <img src="../img/hy.png" alt="">
@@ -75,6 +81,8 @@
     name: "people",
     data(){
       return{
+        dialogVisibleU:false,
+        dialogImageUrl:'',
         VipName:'',
         IDCard:'',
         yyImage:'',
@@ -233,10 +241,11 @@
         this.imageUrl=res.Result[0]
       },
       handlePictureCardPreviewU(file) {
-
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
       },
       handleAvatarSuccessU(res, file) {
-        this.yyImage=res.Result[0]
+        this.yyImage=this.yyImage.concat(res.Result+";")
       }
     }
   }

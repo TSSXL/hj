@@ -84,7 +84,7 @@
     display: flex;
     flex-direction: row;
     width:20%;
-    margin-left: 60%;
+    margin-left: 42.5%;
     .wx{
        margin-top: 5%;
       margin-left: 13%;
@@ -93,8 +93,8 @@
         width:77px;
       }
       p{
-        color:rgba(16,16,16,1);
-        font-weight:400;
+        color: #6d6d6d;
+        font-weight:bold;
       }
     }
   }
@@ -105,6 +105,7 @@
       }
     }
     .e{
+      margin-left: 42%;
       .wx{
         img{
           height:70px;
@@ -118,6 +119,9 @@
       .a{
         margin-left: 7%;
       }
+    }
+    .e{
+      margin-left: 41%;
     }
   }
   @media only screen and (max-width: 1366px){
@@ -143,6 +147,7 @@
       }
     }
     .e{
+      margin-left: 37.5%;
       .wx{
      margin-left: 18%;
       }

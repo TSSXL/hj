@@ -67,19 +67,13 @@
                   this.$message("修改成功")
                   this.$router.push({path:'/'})
                 }else{
-                  this.$notify.error({
-                    title: "出错啦",
-                    message: "请通知后台",
-                  });
+                  this.$message("出错啦，后台出错")
                 }
               }.bind(this)
             )
             .catch(
               function (error) {
-                this.$notify.error({
-                  title: "修改失败",
-                  message: "您输入的信息有误",
-                });
+                this.$message("修改失败，您输入的信息有误")
               }.bind(this)
             )
         }else{
@@ -101,19 +95,13 @@
                   this.$message("修改成功")
                   this.$router.push({path:'/'})
                 }else{
-                  this.$notify.error({
-                    title: "出错啦",
-                    message: "请通知后台",
-                  });
+                  this.$message("出错啦，后台出错")
                 }
               }.bind(this)
             )
             .catch(
               function (error) {
-                this.$notify.error({
-                  title: "修改失败",
-                  message: "您输入的信息有误",
-                });
+                this.$message("修改失败，您输入的信息有误")
               }.bind(this)
             )
         }

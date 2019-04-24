@@ -10,7 +10,7 @@
             <img  @click="goods(item.ID,item.ClassID)"   :src="item.image.ImagePath[0]" >
             <hr>
             <p>{{item.Name}}</p>
-            <p class="price" :style="PriceStyle">￥{{item.Price}}</p>
+            <p class="price" :style="PriceStyle">原价￥{{item.Price}}</i> </p>
             <span>会员价￥{{item.VipPrice}}</span>
           </li>
         </ul>
@@ -168,7 +168,7 @@
       float: left;
       width:20%;
       height:100%;
-      font-size: 2.5em;
+      font-size: 2.3em;
       font-weight: bolder;
       line-height:100px;
       color:#919191;
@@ -217,10 +217,9 @@
        span{
          display: inline-block;
          position: absolute;
-         margin-top: -2.3%;
+         margin-top: -2.4%;
          font-size: 2.2em;
          font-weight: bolder;
-         margin-left: -2%;
          color:#33647F;
        }
      }

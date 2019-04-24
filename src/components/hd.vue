@@ -3,20 +3,23 @@
       <img src="../img/headLogo.png" alt="" @click="gotoHome">
       <h1>合捷清洁</h1>
       <div class="right" v-if="num">
-        <img class="rightImg" src="../img/p.svg" alt="">
+        <img class="rightImg" src="../img/p.svg" @click="login">
         <span class="dl" @click="login">登录</span>
         <hr>
         <span class="re" @click="re">注册</span>
       </div>
       <div class="rightT" v-else>
         <img :src="info.UserImage" @click="goto" style="cursor: pointer" class="people">
-        <span class="Title name" @click="show" >{{info.NickName}}</span>
-          <img class="c" src="../img/car.png" @click="gotoShop">
-          <span  class="Title"@click="gotoShop" >购物车</span>
-          <div class="tc" :style="tcStyle" >
+        <span class="Title name"  @mouseenter="show">
+          <span>{{info.NickName}}</span>
+              <div class="tc" v-show="a">
            <span @click="tcDL">退出登录</span>
           <img src="../img/close.svg" @click="closeTC">
         </div>
+        </span>
+          <img class="c" src="../img/car.png" @click="gotoShop">
+          <span  class="Title" @click="gotoShop" >购物车</span>
+
      </div>
     </div>
 </template>
@@ -26,6 +29,7 @@
         name: "hd",
       data(){
           return{
+            a:false,
             tcStyle:{display:'none'},
             info:{},
            num:true
@@ -42,7 +46,7 @@
       },
       methods:{
         closeTC(){
-          this.tcStyle={display:'none'}
+         this.a=false
         },
         tcDL(){
           this.$store.state.token=''
@@ -71,8 +75,9 @@
               function (error) {
                 this.$notify.error({
                   title: "错误",
-                  message: "登录失效",
+                  message: "登录失效,请重新登录",
                 });
+                this.$router.push({path:'/login'})
               }.bind(this)
             )
         },
@@ -86,7 +91,7 @@
             this.$router.push({path:'/shopCar'})
         },
         show(){
-          this.tcStyle={display:'block'}
+         this.a=true
         },
         goto(){
            this.$router.push({path:'/people'})
@@ -150,22 +155,22 @@
      display: flex;
      flex-direction: row;
      .people{
-       height:80px;
-       width:80px;
+       height:50px;
+       width:50px;
        border-radius: 50%;
        margin-left: 20%;
+       margin-top: 3%;
      }
      .Title{
        font-size: 2em;
        color:#919191;
        font-weight: 400;
-       margin-left: 2%;
+       margin-left: 3%;
        letter-spacing: 1px;
        margin-top: 5%;
        cursor: pointer;
      }
      .name{
-       width:120px;
        height:30px;
      }
      .c{
@@ -173,23 +178,22 @@
        width:30px;
        margin-top: 5%;
        cursor: pointer;
+       margin-left:2%;
      }
      .tc{
        background-color: #e6e6e6;
-       margin-top: 9%;
+       margin-top: 5%;
        height:50px;
-       width:18%;
-       margin-left: -36%;
+       width:100%;
        border-radius: 10px;
        line-height: 50px;
-       font-size: 1.5em;
+       font-size: 14px;
        cursor: pointer;
-       text-align: left;
-       text-indent: 25px;
        position: relative;
+       padding-right: 10px;
        img{
          height:30px;
-         width:30px;
+         width:20px;
          position: absolute;
          margin-top: 10px;
        }
@@ -200,12 +204,9 @@
        font-size: 3em;
        width:140px;
      }
-    .rightT{
-      .tc{
-        margin-left: -39%;
-        text-indent: 18px;
-      }
-    }
+     .right{
+       width:10%;
+     }
    }
    @media only screen and (max-width: 1440px){
      height:120px;
@@ -217,9 +218,11 @@
         width:45%;
       margin-left: 22%;
         .tc{
-          width:19%;
-          margin-left: -41%;
-          height:45px;
+          height:40px;
+          line-height: 40px;
+          img{
+            margin-top: 5px;
+          }
         }
       }
    }
@@ -227,17 +230,6 @@
  .right{
    margin-left: 50%;
  }
-     .rightT{
-       .tc{
-         width:20%;
-         margin-left: -42.5%;
-         height:40px;
-         line-height: 40px;
-         img{
-           margin-top: 5px;
-         }
-       }
-     }
    }
    @media only screen and (max-width: 1280px){
      .right{
@@ -246,10 +238,6 @@
      .rightT{
        width:50%;
        margin-left: 13%;
-       .tc{
-         width:19%;
-       margin-left: -40.5%;
-       }
      }
    }
    @media only screen and (max-width: 1024px){
@@ -258,11 +246,8 @@
   margin-left: 35%;
 }
      .rightT{
-       width:65%;
-       margin-left: 0%;
-       .tc{
-       margin-left: -42%;
-       }
+       width:50%;
+       margin-left: 10%;
      }
    }
  }

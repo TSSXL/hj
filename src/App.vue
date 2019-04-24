@@ -32,6 +32,7 @@ export default {
     position: relative;
     overflow: hidden;
     float: left;
+    margin-left: 0px;
   }
   input:focus{
     outline: none;

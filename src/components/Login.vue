@@ -52,10 +52,7 @@
         }
         //如果不满足手机登录或者邮箱登录
         else{
-          this.$notify.error({
-            title: "失败",
-            message: "请重新输入账号和密码",
-          })
+          this.$message("登录失败,您输入的账号有误")
         }
       },
       getLogin(type){
@@ -89,10 +86,7 @@
           )
           .catch(
             function (error) {
-              this.$notify.error({
-                title: "登录失败",
-                message: "请重新输入",
-              });
+              this.$message("登录失败,您输入的信息有误")
             }.bind(this)
           )
       },

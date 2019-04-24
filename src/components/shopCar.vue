@@ -9,8 +9,8 @@
           <img class="image" @click="goods(item.ID,item.ClassID)" :src="item.Image[0]" alt="">
           <span class="info">
             <p>{{item.Name}}</p>
-            <p :style="PriceStyle">￥{{item.Price}}</p>
-            <p>￥{{item.VipPrice}}</p>
+            <p :style="PriceStyle">原价￥{{item.Price}}</p>
+            <p>会员价￥{{item.VipPrice}}</p>
           </span>
           <span class="num">
           <img src="../img/cut.png" @click="cutNum(item.Count,item.ID)">
@@ -285,7 +285,7 @@
             margin-top: 1%;
             p{
               width: 100%;
-              font-size: 2em;
+              font-size: 1.6em;
               margin-left: 0;
               text-align: left;
               margin-top: 15px;
@@ -344,7 +344,7 @@
       span{
         display: inline-block;
         position: absolute;
-        right: 25.5%;
+        right: 25.2%;
         color:#33647F;
         font-size: 2em;
         top:53%;
@@ -370,25 +370,13 @@
         p{
           margin-left: -60%;
         }
-        ul{
-          li{
-         .info{
-           p{
-             font-size: 1.8em;
-           }
-           p:last-child{
-             font-size: 2em;
-           }
-         }
-          }
-        }
       }
       .checkAll{
           .c{
             left: -31%;
           }
         span{
-          right:23.5%;
+          right:23.2%;
         }
       }
     }
@@ -488,6 +476,9 @@
       .checkAll{
         .c{
           left: -28%;
+        }
+        .selectAll{
+          margin-left: -27.5%;
         }
       }
     }

@@ -37,7 +37,7 @@
        </div>
         <div class="right">
           <p>{{goodInfo.Name}}</p>
-          <p>售价:￥{{goodInfo.Price}}</p>
+          <p :style="PriceStyle">售价:￥{{goodInfo.Price}}</p>
           <span>会员价:￥{{goodInfo.VipPrice}}</span>
           <p class="sp">商品简介<br>{{goodInfo.Brif}}</p>
              <img src="../img/car.png" alt="" @click="addCar" class="carImg">
@@ -75,6 +75,7 @@
         name: "goodsInfo",
       data(){
           return{
+            PriceStyle:{},
             isShowVideo:false,
             imgUrl:'',
             videoUrl:'',
@@ -104,6 +105,9 @@
         this.getNav()
         if(this.$store.state.token!=='' ||localStorage.getItem('token')!==null)
         {
+          this.PriceStyle={
+            textDecoration:'line-through'
+          }
           this.isShow=true
           this.getGoodsInfoToken(this.$route.query.ID,this.$store.state.token || localStorage.getItem('token'))
           this.getTj(this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
@@ -357,7 +361,7 @@
         float: left;
         width:20%;
         height:100%;
-        font-size: 2.5em;
+        font-size: 2.3em;
         font-weight: bolder;
         line-height:100px;
         color:#919191;
@@ -435,7 +439,7 @@
         margin-left: 5%;
         height:530px;
         p{
-          font-size: 2em;
+          font-size: 2.5em;
           font-weight: bolder;
           text-align: left;
           margin-top: 0;
@@ -452,8 +456,8 @@
         span{
           display: block;
           margin-top: -5.5%;
-          margin-left: -50%;
-          font-size: 2em;
+          margin-left: -37%;
+          font-size: 2.2em;
           font-weight:bolder;
           color:#33647F;
         }
@@ -569,9 +573,9 @@
          font-size: 2em;
        }
        span{
-         font-size: 2.8em;
+         font-size: 2.6em;
          margin-top: -7%;
-         margin-left: 0%;
+         margin-left: -33%;
        }
      }
    }
@@ -600,6 +604,7 @@
           }
           span{
             font-size: 2.5em;
+            margin-left: -27%;
           }
         }
       }

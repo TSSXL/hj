@@ -16,7 +16,7 @@
     <span>
       <img src="../img/yzm.png" alt="">
       <input class="yzm" v-model="word" type="text" placeholder="请输入验证码">
-      <button @click="getYzm" style="cursor: pointer">获取验证码</button>
+      <button  @click="getYzm" style="cursor: pointer" :disabled="!canClick" :style="btnStyle">{{content}}</button>
     </span>
     <button @click="zc" style="cursor: pointer">免费注册</button>
   </div>
@@ -30,15 +30,40 @@ export default {
   name: 'Register',
   data () {
     return {
+      content:"获取验证码",
+      canClick:true,
       type:'password',
       number:'',
       psd:'',
-      word:''
+      word:'',
+      totalTime:60
+    }
+  },
+  computed:{
+    btnStyle:function () {
+      if(this.canClick===false){
+        return {backgroundColor:'#33647F',color:'white'}
+      }
     }
   },
   methods:{
     showPsd(){
       this.type='text'
+    },
+    timeChange(){
+      if (!this.canClick) return
+      this.canClick = false
+      this.content = this.totalTime + 's后重新发送'
+      let clock = window.setInterval(() => {
+        this.totalTime--
+        this.content = this.totalTime + 's后重新发送'
+        if (this.totalTime < 0) {
+          window.clearInterval(clock)
+          this.content = '重新发送验证码'
+          this.totalTime = 60
+          this.canClick = true  //这里重新开启
+        }
+      },1000)
     },
     //点击获取验证码
     getYzm(){
@@ -57,29 +82,19 @@ export default {
             function (response) {
               if(response.data.Status===1)
               {
-                this.$notify.error({
-                  title: "成功",
-                  message: "请查看您手机的验证码",
-                })
+                this.$message("发送成功，请查看您手机的验证码")
+                this.timeChange()
               }else if(response.data.Status===20){
-                this.$notify.error({
-                  title: "抱歉",
-                  message: "该手机号已经注册",
-                })
+                this.$message("抱歉，该手机号已经注册")
+                this.timeChange()
               }else {
-                this.$notify.error({
-                  title: "错误",
-                  message: "请输入正确的手机号",
-                })
+                this.$message("错误，获取手机验证码失败")
               }
             }.bind(this)
           )
           .catch(
             function (error) {
-              this.$notify.error({
-                title: "出错啦",
-                message: "请输入完整的信息",
-              });
+              this.$message("提示，获取验证码失败")
             }.bind(this)
           )
       }
@@ -95,38 +110,25 @@ export default {
             function (response) {
               if(response.data.Status===1)
               {
-                this.$notify.error({
-                  title: "成功",
-                  message: "请进入您的邮箱查看验证码",
-                })
+                this.$message("发送成功，请进入您的邮箱查看验证码,若未收到，请去垃圾箱中查看")
+                this.timeChange()
               }else if(response.data.Status===20){
-                this.$notify.error({
-                  title: "抱歉",
-                  message: "该邮箱已经注册",
-                })
+                this.$message("抱歉，该邮箱已经注册")
+                this.timeChange()
               }else {
-                this.$notify.error({
-                  title: "错误",
-                  message: "请输入正确的邮箱",
-                })
+                this.$message("错误，请输入正确的邮箱")
               }
             }.bind(this)
           )
           .catch(
             function (error) {
-              this.$notify.error({
-                title: "出错啦",
-                message: "请输入完整的信息",
-              });
+              this.$message("提示，获取验证码失败")
             }.bind(this)
           )
       }
       //都不符合
       else{
-        this.$notify.error({
-          title: "请输入",
-          message: "账号是您的手机号或邮箱",
-        })
+        this.$message("提示，账号是您的手机号或邮箱")
       }
     },
     //点击注册
@@ -172,10 +174,7 @@ export default {
                   )
                   .catch(
                     function (error) {
-                      this.$notify.error({
-                        title: "注册失败",
-                        message: "您输入的信息有误",
-                      });
+                      this.$message("注册失败,您输入的信息有误")
                     }.bind(this)
                   )
               }else{
@@ -185,10 +184,7 @@ export default {
           )
           .catch(
             function (error) {
-              this.$notify.error({
-                title: "注册失败",
-                message: "您输入的信息有误",
-              });
+              this.$message("注册失败,您输入的信息有误")
             }.bind(this)
           )
       }
@@ -221,19 +217,13 @@ export default {
           )
           .catch(
             function (error) {
-              this.$notify.error({
-                title: "注册失败",
-                message: "您输入的信息有误",
-              });
+              this.$message("注册失败,您输入的信息有误")
             }.bind(this)
           )
       }
       //如果不满足手机注册或邮箱注册
       else{
-        this.$notify.error({
-          title: "错误",
-          message: "您少输或输入的格式不正确",
-        });
+        this.$message("提示,您少输或输入的格式不正确")
       }
     }
   }
@@ -288,7 +278,7 @@ export default {
         margin-top: 5px;
       }
       button{
-        width:18%;
+        width:22%;
         float: left;
         height:34px;
         margin-left: 1%;

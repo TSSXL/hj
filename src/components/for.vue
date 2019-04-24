@@ -11,7 +11,7 @@
       <span>
    <img src="../img/yzm.png" alt="">
       <input class="yzm" v-model="word" type="text" placeholder="请输入验证码">
-      <button @click="getYzm" style="cursor: pointer">获取验证码</button>
+      <button @click="getYzm" style="cursor: pointer" :disabled="!canClick" :style="btnStyle">{{content}}</button>
     </span>
       <button @click="Login" style="cursor: pointer">下一步</button>
     </div>
@@ -25,12 +25,37 @@
     name: 'for',
     data () {
       return {
+        totalTime:60,
+        content:"获取验证码",
+        canClick:true,
         number:'',
         psd:'',
         word:''
       }
     },
+    computed:{
+      btnStyle:function () {
+        if(this.canClick===false){
+          return {backgroundColor:'#33647F',color:'white'}
+        }
+      }
+    },
     methods:{
+      timeChange(){
+        if (!this.canClick) return
+        this.canClick = false
+        this.content = this.totalTime + 's后重新发送'
+        let clock = window.setInterval(() => {
+          this.totalTime--
+          this.content = this.totalTime + 's后重新发送'
+          if (this.totalTime < 0) {
+            window.clearInterval(clock)
+            this.content = '重新发送验证码'
+            this.totalTime = 60
+            this.canClick = true  //这里重新开启
+          }
+        },1000)
+      },
       //获取验证码
       getYzm(){
         let Re= /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/
@@ -48,29 +73,19 @@
               function (response) {
                 if(response.data.Status===1)
                 {
-                  this.$notify.error({
-                    title: "成功",
-                    message: "请查看您手机的验证码",
-                  })
+                  this.$message("发送成功，请查看您手机的验证码")
+                  this.timeChange()
                 }else if(response.data.Status===20){
-                  this.$notify.error({
-                    title: "抱歉",
-                    message: "该手机号已经注册",
-                  })
+                  this.$message("抱歉，该手机号已经注册")
+                  this.timeChange()
                 }else {
-                  this.$notify.error({
-                    title: "错误",
-                    message: "请输入正确的邮箱",
-                  })
+                  this.$message("错误，请输入正确的手机号")
                 }
               }.bind(this)
             )
             .catch(
               function (error) {
-                this.$notify.error({
-                  title: "出错啦",
-                  message: "请输入完整的信息",
-                });
+                this.$message("提示，获取验证码失败")
               }.bind(this)
             )
         }
@@ -86,33 +101,22 @@
               function (response) {
                 if(response.data.Status===1)
                 {
-                  this.$notify.error({
-                    title: "成功",
-                    message: "请进入您的邮箱查看验证码",
-                  })
+                  this.$message("发送成功，请进入您的邮箱查看验证码,若未收到，请去垃圾箱中查看")
+                  this.timeChange()
                 }else{
-                  this.$notify.error({
-                    title: "错误",
-                    message: "请输入正确的邮箱",
-                  })
+                  this.$message("错误，请输入正确的邮箱")
                 }
               }.bind(this)
             )
             .catch(
               function (error) {
-                this.$notify.error({
-                  title: "出错啦",
-                  message: "请输入正确的信息",
-                });
+                this.$message("提示，获取验证码失败")
               }.bind(this)
             )
         }
         //都不符合
         else{
-          this.$notify.error({
-            title: "请输入",
-            message: "账号是您的手机号或邮箱",
-          })
+          this.$message("提示，账号是您的手机号或邮箱")
         }
       },
       //点击登录
@@ -136,19 +140,13 @@
                   this.$message("验证成功")
                   this.$router.push({path:'/forget',query:{name:response.data.Result.name,code:response.data.Result.code,token:response.data.Result.PCToken}})
                 }else{
-                  this.$notify.error({
-                    title: "出错啦",
-                    message: "验证码错误",
-                  });
+                  this.$message("抱歉，输入的验证码错误")
                 }
               }.bind(this)
             )
             .catch(
               function (error) {
-                this.$notify.error({
-                  title: "错误",
-                  message: "您输入的信息有误",
-                });
+                this.$message("提示，您输入的信息有误")
               }.bind(this)
             )
         }
@@ -174,19 +172,13 @@
             )
             .catch(
               function (error) {
-                this.$notify.error({
-                  title: "错误",
-                  message: "您输入的信息有误",
-                });
+                this.$message("提示，您输入的信息有误")
               }.bind(this)
             )
         }
         //都不符合
         else{
-          this.$notify.error({
-            title: "错误",
-            message: "您少输或输入的格式不正确",
-          });
+          this.$message("提示，您少输或输入的格式不正确")
         }
       }
     }
@@ -241,7 +233,7 @@
           margin-top: 5px;
         }
         button{
-          width:18%;
+          width:22%;
           float: left;
           height:34px;
           margin-left: 1%;

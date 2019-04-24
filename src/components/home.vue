@@ -13,13 +13,13 @@
       </el-carousel>
       <!--商品分类内容-->
       <div class="container" v-for="item in list">
-        <p class="l">{{item.Title}}</p>
+        <p>{{item.Title}}</p>
         <ul class="containUl">
           <li v-for="j in item.Content">
             <img  @click="goods(j.ID,j.ClassID)" :src="j.image.ImagePath&&j.image.ImagePath[0]"  alt="正在加载中">
             <hr>
             <p>{{j.Name}}</p>
-            <p class="price" :style="PriceStyle">￥{{j.Price}}</p>
+            <p class="price" :style="PriceStyle">原价￥{{j.Price}}</p>
            <span>会员价￥{{j.VipPrice}}</span>
           </li>
         </ul>
@@ -176,7 +176,7 @@
        float: left;
        width:20%;
        height:100%;
-       font-size: 2.5em;
+       font-size: 2.3em;
        font-weight: bolder;
        line-height:100px;
        color:#919191;
@@ -195,7 +195,7 @@
      width:100%;
      background-color: #FCFCFC;
      p{
-       font-size: 2.5em;
+       font-size: 2.3em;
        font-weight: bolder;
        color:#777777;
      }
@@ -244,12 +244,6 @@
    }
    @media only screen and (max-width: 1680px){
     .container{
-      .l{
-        text-indent: 2.5%;
-      }
-   .l:after{
-   margin-left: -4.5%;
-    }
       .containUl{
         li{
           height:300px;
@@ -270,10 +264,6 @@
    }
    @media only screen and (max-width: 1440px){
      .container{
-       .l:after{
-         margin-left: -5.3%;
-         margin-top: 2.5%;
-       }
        .containUl{
          li{
            height:260px;
@@ -293,9 +283,6 @@
    }
    @media only screen and (max-width: 1366px){
      .container{
-       .l:after{
-         margin-left: -5.4%;
-       }
        .containUl{
          li{
            p{
@@ -307,9 +294,6 @@
    }
    @media only screen and (max-width: 1280px){
      .container{
-       .l:after{
-         margin-left: -5.9%;
-       }
        .containUl{
          li{
            height:240px;
@@ -334,9 +318,6 @@
        }
      }
      .container{
-       .l:after{
-         margin-left: -5.8%;
-       }
        p{
          font-size: 1.8em;
        }
