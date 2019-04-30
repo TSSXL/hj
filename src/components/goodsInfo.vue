@@ -2,6 +2,7 @@
     <div class="goodsInfo">
       <Logo-Component></Logo-Component>
       <ul class="nav">
+        <li>产品中心</li>
         <li v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="ColorStyle(item.ID)">{{item.Name}}</li>
       </ul>
       <!--商品名称-->
@@ -88,7 +89,6 @@
             ID:'',
             num:false,
             navList:[
-              {ID:"0",Name:"首页"}
             ],
             colorStyle:{
               color:'#33647F'
@@ -340,12 +340,7 @@
 
         },
         handle(index,ID){
-          if(index===0)
-          {
-            this.$router.push('/')
-          }else{
             this.$router.push({path:'/classify',query:{id:index,ID:ID}})
-          }
         }
       }
     }

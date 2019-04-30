@@ -15,6 +15,15 @@ export default {
     margin: 0;
     padding: 0;
   }
+  a{
+    color:white;
+  }
+  .el-button{
+    border:1px solid white;
+    font-size: 22px;
+    font-weight: bolder;
+    color:#919191;
+  }
   .el-checkbox__inner{
     width:30px !important;
     height:30px !important;
@@ -45,4 +54,9 @@ export default {
   color: #2c3e50;
   font-size: 62.5%;
 }
+  @media only screen and (max-width: 1366px){
+    .el-cascader-menus{
+      height:450px;
+    }
+  }
 </style>

@@ -3,7 +3,18 @@
     <Logo-Component></Logo-Component>
       <!--四个导航栏-->
       <ul class="nav">
-        <li v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="select===index?colorStyle:''">{{item.Name}}</li>
+        <li class="firstLi" @click="gotoGoodsMain" @mouseenter="showDio">
+          <el-popover
+            placement="bottom"
+            width="900"
+            trigger="hover"
+         >
+            <Jl-Component></Jl-Component>
+            <el-button slot="reference">产品中心</el-button>
+          </el-popover>
+        </li>
+        <li v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="select===index?colorStyle:''">{{item.Name}}
+        </li>
       </ul>
       <!--轮播图-->
       <el-carousel height="550px">
@@ -31,16 +42,19 @@
 <script>
   import LogoComponent from './hd'
   import FootComponent from './foot'
+  import JlComponent from './jl'
     export default {
         name: "home",
       data(){
           return{
+            dioStyle:{display:'none'},
+            options: [],
+            selectedOptions2: [],
             PriceStyle:{},
              navList:[
-              {ID:"0",Name:"首页"}
              ],
             imgList:[],
-            select:0,
+            select:'',
             colorStyle:{
                color:'#33647F',
               borderTop:'2px solid #33647F'
@@ -48,10 +62,11 @@
             list:[]
           }
       },
-      components:{LogoComponent,FootComponent},
+      components:{LogoComponent,FootComponent,JlComponent},
       created(){
           this.getImg()
           this.getNav()
+        this.getPro()
         if(this.$store.state.token!=='' || localStorage.getItem('token')!==null)
         {
           this.PriceStyle={
@@ -69,6 +84,28 @@
         }
       },
       methods:{
+          getPro(){
+            this.$http
+              .post("/api/Shopping/ProTypeList")
+              .then(
+                function (response) {
+                 this.options=response.data.Result
+                  this.options=JSON.parse(JSON.stringify(this.options).replace(/PTFtName/g,'label').replace(/ID/g,'value').replace(/ProTypeSecond/g,'children').replace(/PTFtvalue/g,'value').replace(/PTSdName/g,'label'))
+                  console.log(this.options)
+                }.bind(this)
+              )
+              .catch(
+                function (error) {
+                  this.$notify.error({
+                    title: "错误",
+                    message: "获取数据错误",
+                  });
+                }.bind(this)
+              )
+          },
+        gotoGoodsMain(){
+          this.$router.push({path:'/goodsMain'})
+        },
           //获取轮播图
         getImg(){
           this.$http
@@ -155,12 +192,10 @@
         //导航栏切换
         handle(index,ID){
           this.select=index
-          if(index!==0)
-          {
             this.$router.push({path:'/classify',query:{id:index,ID:ID}})
-          }else{
-           this.$message("本页不用跳转啦")
-          }
+        },
+        showDio(){
+  this.dioStyle={display:'block '}
         }
       }
     }
@@ -184,8 +219,9 @@
      li:hover{
        cursor: pointer;
      }
-     li:first-child{
-       margin-left:10%;
+     .firstLi {
+       margin-left: 10%;
+       position: relative;
      }
    }
    .container{

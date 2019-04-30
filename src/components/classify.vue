@@ -2,6 +2,7 @@
     <div class="classify">
       <Logo-Component></Logo-Component>
       <ul class="nav">
+        <li @click="gotoGoodsMain">产品中心</li>
         <li  v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="colorStyle(index)">{{item.Name}}</li>
       </ul>
       <div class="classGoods">
@@ -28,7 +29,6 @@
           return{
             PriceStyle:{},
             navList:[
-              {ID:"0",Name:"首页"}
             ],
             list:[],
             select:1,
@@ -58,6 +58,9 @@
         }
       },
       methods:{
+        gotoGoodsMain(){
+          this.$router.push({path:'/goodsMain'})
+        },
         colorStyle(index){
          if(index===this.select){
            return {color:'#33647F',borderTop:'2px solid #33647F'}
@@ -146,13 +149,8 @@
         },
         handle(index,ID){
           this.select=index
-          if(index===0)
-          {
-            this.$router.push('/')
-          }else{
              this.getGoodsToken(ID,this.$store.state.token || localStorage.getItem('token'))
             this.$router.push({path:'/classify',query:{id:index,ID:ID}})
-          }
         }
       }
     }
