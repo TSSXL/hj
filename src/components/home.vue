@@ -3,13 +3,13 @@
     <Logo-Component></Logo-Component>
       <!--四个导航栏-->
       <ul class="nav">
-        <li class="firstLi" @click="gotoGoodsMain" @mouseenter="showDio">
+        <li class="firstLi" @click="gotoGoodsMain">
           <el-popover
             placement="bottom"
             width="900"
             trigger="hover"
          >
-            <Jl-Component></Jl-Component>
+            <Jl-Component style="margin-left: 200px;"></Jl-Component>
             <el-button slot="reference">产品中心</el-button>
           </el-popover>
         </li>
@@ -22,6 +22,8 @@
           <img :src="item.Image" alt="" style="width:100%;height:100%;cursor: pointer" @click="goods(item.ProID,item.ClassID)">
         </el-carousel-item>
       </el-carousel>
+      <!--<span class="lxUs" @click="gotoLx">售后客服</span>-->
+      <img class="lxUs" src="../img/sh.svg" @click="gotoLx">
       <!--商品分类内容-->
       <div class="container" v-for="item in list">
         <p>{{item.Title}}</p>
@@ -48,7 +50,6 @@
       data(){
           return{
             dioStyle:{display:'none'},
-            options: [],
             selectedOptions2: [],
             PriceStyle:{},
              navList:[
@@ -66,7 +67,6 @@
       created(){
           this.getImg()
           this.getNav()
-        this.getPro()
         if(this.$store.state.token!=='' || localStorage.getItem('token')!==null)
         {
           this.PriceStyle={
@@ -84,25 +84,9 @@
         }
       },
       methods:{
-          getPro(){
-            this.$http
-              .post("/api/Shopping/ProTypeList")
-              .then(
-                function (response) {
-                 this.options=response.data.Result
-                  this.options=JSON.parse(JSON.stringify(this.options).replace(/PTFtName/g,'label').replace(/ID/g,'value').replace(/ProTypeSecond/g,'children').replace(/PTFtvalue/g,'value').replace(/PTSdName/g,'label'))
-                  console.log(this.options)
-                }.bind(this)
-              )
-              .catch(
-                function (error) {
-                  this.$notify.error({
-                    title: "错误",
-                    message: "获取数据错误",
-                  });
-                }.bind(this)
-              )
-          },
+        gotoLx(){
+          this.$router.push({path:'/lx'})
+        },
         gotoGoodsMain(){
           this.$router.push({path:'/goodsMain'})
         },
@@ -223,6 +207,15 @@
        margin-left: 10%;
        position: relative;
      }
+   }
+   .lxUs{
+     position: absolute;
+     margin-top: -250px;
+     z-index: 999;
+     right:0;
+     cursor: pointer;
+     height:50px;
+     width:50px;
    }
    .container{
      margin-top: 20px;

@@ -10,15 +10,18 @@
       </div>
       <div class="rightT" v-else>
         <img :src="info.UserImage" @click="goto" style="cursor: pointer" class="people">
-        <span class="Title name"  @mouseenter="show">
-          <span>{{info.NickName}}</span>
-              <div class="tc" v-show="a">
-           <span @click="tcDL">退出登录</span>
-          <img src="../img/close.svg" @click="closeTC">
-        </div>
+        <span class="Title name">
+          <el-popover
+            placement="bottom"
+            width="60"
+            trigger="hover"
+          >
+                <span style="cursor: pointer;font-weight: bolder" @click="tcDL">退出登录</span>
+            <el-button slot="reference">{{info.NickName}}</el-button>
+          </el-popover>
         </span>
           <img class="c" src="../img/car.png" @click="gotoShop">
-          <span  class="Title" @click="gotoShop" >购物车</span>
+          <span  class="Title t" @click="gotoShop" >购物车</span>
 
      </div>
     </div>
@@ -69,6 +72,8 @@
               function (response) {
                 this.info=response.data.Result
                 this.info.UserImage='http://hmc.nbxuanma.com'+response.data.Result.UserImage
+                this.$store.state.VipLv=response.data.Result.VipLv
+                localStorage.setItem('VipLv',response.data.Result.VipLv)
               }.bind(this)
             )
             .catch(
@@ -159,7 +164,7 @@
        width:50px;
        border-radius: 50%;
        margin-left: 20%;
-       margin-top: 3%;
+       margin-top: 4%;
      }
      .Title{
        font-size: 2em;
@@ -176,27 +181,12 @@
      .c{
        height:25px;
        width:30px;
-       margin-top: 5%;
+       margin-top: 6%;
        cursor: pointer;
        margin-left:2%;
      }
-     .tc{
-       background-color: #e6e6e6;
-       margin-top: 5%;
-       height:50px;
-       width:100%;
-       border-radius: 10px;
-       line-height: 50px;
-       font-size: 14px;
-       cursor: pointer;
-       position: relative;
-       padding-right: 10px;
-       img{
-         height:30px;
-         width:20px;
-         position: absolute;
-         margin-top: 10px;
-       }
+     .t{
+       margin-top: 6%;
      }
    }
    @media only screen and (max-width: 1680px){
@@ -230,6 +220,11 @@
  .right{
    margin-left: 50%;
  }
+     .rightT{
+       .c,.t{
+         margin-top: 7%;
+       }
+     }
    }
    @media only screen and (max-width: 1280px){
      .right{

@@ -40,15 +40,7 @@
               .then(
                 function (response) {
                   this.list=response.data.Result
-                  console.log(this.list)
-                }.bind(this)
-              )
-              .catch(
-                function (error) {
-                  this.$notify.error({
-                    title: "错误",
-                    message: "获取导航栏失败",
-                  });
+                  localStorage.setItem('jlID',this.list[0].ProTypeSecond[0].ID)
                 }.bind(this)
               )
           }
@@ -81,6 +73,7 @@
        text-align: left;
        position: relative;
        text-indent: 10px;
+       cursor: pointer;
        a{
          text-decoration: none;
          font-size: 2em;
@@ -142,6 +135,94 @@
      }
      .firstLI:hover .firstUL{
        display: block;
+     }
+   }
+   @media only screen and (max-width: 1680px){
+   width:265px;
+     background-color: #D6D6D6;
+     ul{
+       .firstLI{
+        a{
+          color:black;
+          font-weight: bolder;
+        }
+         .firstUL{
+           margin-left: 265px;
+           background-color: #D6D6D6;
+         li{
+           a{
+             color:black;
+             font-weight: bolder;
+           }
+         }
+           .secondLI{
+             .secondUL{
+               margin-left: 265px;
+               background-color: #D6D6D6;
+             }
+           }
+         }
+       }
+     }
+   }
+   @media only screen and (max-width: 1440px){
+     width:228px;
+     ul{
+       .firstLI{
+         .firstUL{
+           margin-left: 228px;
+           .secondLI{
+             .secondUL{
+               margin-left: 228px;
+             }
+           }
+         }
+       }
+     }
+   }
+   @media only screen and (max-width: 1366px){
+     width:215px;
+     ul{
+       .firstLI{
+         .firstUL{
+           margin-left: 215px;
+           .secondLI{
+             .secondUL{
+               margin-left: 215px;
+             }
+           }
+         }
+       }
+     }
+   }
+   @media only screen and (max-width: 1280px){
+     width:202px;
+     ul{
+       .firstLI{
+         .firstUL{
+           margin-left: 202px;
+           .secondLI{
+             .secondUL{
+               margin-left: 202px;
+             }
+           }
+         }
+       }
+     }
+   }
+   @media only screen and (max-width: 1024px){
+     width:150px;
+     ul{
+       .firstLI{
+         .firstUL{
+           margin-left: 150px;
+           .secondLI{
+             .secondUL{
+               margin-left: 150px;
+             }
+           }
+         }
+       }
      }
    }
  }

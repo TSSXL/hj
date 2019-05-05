@@ -18,11 +18,23 @@ export default {
   a{
     color:white;
   }
+  .el-popover{
+    border: none !important;
+    min-width:0 !important;
+    background-color:transparent !important;
+    box-shadow: none !important;
+  }
+  .el-button:hover{
+    background-color: white !important;
+    border: none !important;
+    color:#919191 !important;
+  }
   .el-button{
-    border:1px solid white;
-    font-size: 22px;
-    font-weight: bolder;
-    color:#919191;
+    border:none !important;
+    font-size: 22px !important;
+    font-weight: bolder !important;
+    color:#919191 !important;
+    background-color:transparent !important;
   }
   .el-checkbox__inner{
     width:30px !important;

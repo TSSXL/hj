@@ -2,7 +2,7 @@
     <div class="goodsInfo">
       <Logo-Component></Logo-Component>
       <ul class="nav">
-        <li>产品中心</li>
+        <li @click="gotoGoodsMain">产品中心</li>
         <li v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="ColorStyle(item.ID)">{{item.Name}}</li>
       </ul>
       <!--商品名称-->
@@ -42,7 +42,7 @@
           <span>会员价:￥{{goodInfo.VipPrice}}</span>
           <p class="sp">商品简介<br>{{goodInfo.Brif}}</p>
              <img src="../img/car.png" alt="" @click="addCar" class="carImg">
-          <el-button class="btn"  type="danger" @click="addCar">加入购物车</el-button>
+          <el-button class="btn"  type="danger" @click="addCar" style="color:white !important;">加入购物车</el-button>
         </div>
       </div>
       <!--商品推荐-->
@@ -116,6 +116,9 @@
         }
       },
       methods:{
+        gotoGoodsMain(){
+          this.$router.push({path:'/goodsMain'})
+        },
         leftImage(){
           if(--this.imageIndex<=0)
           {

@@ -10,7 +10,8 @@ export default new Vuex.Store({
   state: {
     token: '',
     imageStart:0,
-    imageEnd:3
+    imageEnd:3,
+    VipLv:null
   }
 })
 

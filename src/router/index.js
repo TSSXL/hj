@@ -11,7 +11,7 @@ import ShopCar from '@/components/shopCar'
 import People from '@/components/people'
 import For from '@/components/for'
 import GoodsMain from '@/components/goodsMain'
-import jl from '@/components/jl'
+import LX from '@/components/lx'
 
 Vue.use(Router)
 
@@ -73,9 +73,9 @@ export default new Router({
       component: For
     },
     {
-      path: '/jl',
-      name: 'Jl',
-      component: jl
+      path: '/lx',
+      name: 'LX',
+      component: LX
     }
   ],
   //解决页面跳转加载不在页面顶部的问题
