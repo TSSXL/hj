@@ -188,7 +188,7 @@
      display: inline-block;
      li{
        float: left;
-       width:20%;
+       width:22.5%;
        height:320px;
        margin-left: 8%;
        margin-top: 2%;

@@ -1,12 +1,13 @@
 <template>
     <div class="jlContainer">
       <ul>
-        <li class="firstLI" v-for="(item,index) in list" :key="index"><a href="#">{{item.PTFtName}}</a><img class="firstImg" src="../img/r.svg">
+        <li class="firstLI" v-for="(item,index) in list" :key="index" ><a href="#">{{item.PTFtName}}</a><img class="firstImg" src="../img/r.svg">
           <ul class="firstUL">
-            <li class="secondLI" v-for="(j,index) in item.ProTypeSecond" :key="index"><a href="#">{{j.PTSdName}}</a><img class="secondImg" src="../img/r.svg">
-              <ul class="secondUL">
-                <li v-for="(i,index) in j.Content" :key="index"><a @click="goods(i.ID,i.ClassID)">{{i.Name}}</a></li>
-              </ul></li>
+            <li class="secondLI"  v-for="(j,index) in item.ProTypeSecond" :key="index" @click="gotoGoodsMain(j.ID)"><a>{{j.PTSdName}}</a>
+              <!--<ul class="secondUL">-->
+                <!--<li v-for="(i,index) in j.Content" :key="index"><a @click="goods(i.ID,i.ClassID)">{{i.Name}}</a></li>-->
+              <!--</ul>-->
+            </li>
           </ul>
         </li>
       </ul>
@@ -19,16 +20,17 @@
         name: "jl",
       data(){
           return{
-            list:[]
+            list:[],
           }
       },
       created(){
           this.getList()
       },
       methods:{
-        //点击进入商品详情
-        goods(ID,ClassID){
-          this.$router.push({path:'/goodsInfo',query:{ID:ID,ClassID:ClassID}})
+        //点击进入产品中心
+        gotoGoodsMain(ID){
+          this.$router.push({path:'/goodsMain',query:{ID:ID}})
+          this.$router.go(0)
         },
           getList(){
             this.$http
@@ -43,19 +45,25 @@
                   localStorage.setItem('jlID',this.list[0].ProTypeSecond[0].ID)
                 }.bind(this)
               )
+              .catch(
+                function (error) {
+                  console.log(error)
+                }
+              )
           }
       }
     }
 </script>
 
 <style lang="scss" scoped>
-  $height:300px;
-  $width:300px;
-  $bg:#2d425a;
+  $height:550px;
+  $width:350px;
+  $bg:#000000;
  .jlContainer{
-   width:$width;
+   width:200px;
    height:$height;
    background-color: $bg;
+   opacity: 0.8;
    font-size: 62.5%;
    ul{
      list-style: none;
@@ -88,11 +96,11 @@
          top:10px;
        }
        .firstUL{
-         width:100%;
+         width:$width;
          height:$height;
          background-color: $bg;
           position: absolute;
-         margin-left: $width;
+         margin-left:200px;
          margin-top: -42px;
          display: none;
          li{
@@ -115,19 +123,6 @@
              top:10px;
            }
          }
-         .secondLI{
-           .secondUL{
-             height:$height;
-             margin-left: $width;
-             position: absolute;
-             background-color: $bg;
-             color:white;
-             margin-top: -42px;
-           }
-         }
-         .secondLI:hover .secondUL{
-           display: block;
-         }
        }
      }
      li:hover{
@@ -138,7 +133,7 @@
      }
    }
    @media only screen and (max-width: 1680px){
-   width:265px;
+   width:200px;
      background-color: #D6D6D6;
      ul{
        .firstLI{
@@ -147,7 +142,7 @@
           font-weight: bolder;
         }
          .firstUL{
-           margin-left: 265px;
+           margin-left: 200px;
            background-color: #D6D6D6;
          li{
            a{
@@ -155,75 +150,69 @@
              font-weight: bolder;
            }
          }
-           .secondLI{
-             .secondUL{
-               margin-left: 265px;
-               background-color: #D6D6D6;
-             }
-           }
          }
        }
      }
    }
-   @media only screen and (max-width: 1440px){
-     width:228px;
-     ul{
-       .firstLI{
-         .firstUL{
-           margin-left: 228px;
-           .secondLI{
-             .secondUL{
-               margin-left: 228px;
-             }
-           }
-         }
-       }
-     }
-   }
-   @media only screen and (max-width: 1366px){
-     width:215px;
-     ul{
-       .firstLI{
-         .firstUL{
-           margin-left: 215px;
-           .secondLI{
-             .secondUL{
-               margin-left: 215px;
-             }
-           }
-         }
-       }
-     }
-   }
-   @media only screen and (max-width: 1280px){
-     width:202px;
-     ul{
-       .firstLI{
-         .firstUL{
-           margin-left: 202px;
-           .secondLI{
-             .secondUL{
-               margin-left: 202px;
-             }
-           }
-         }
-       }
-     }
-   }
-   @media only screen and (max-width: 1024px){
-     width:150px;
-     ul{
-       .firstLI{
-         .firstUL{
-           margin-left: 150px;
-           .secondLI{
-             .secondUL{
-               margin-left: 150px;
-             }
-           }
-         }
-       }
-     }
-   }
+   /*@media only screen and (max-width: 1440px){*/
+     /*width:228px;*/
+     /*ul{*/
+       /*.firstLI{*/
+         /*.firstUL{*/
+           /*margin-left: 228px;*/
+           /*.secondLI{*/
+             /*.secondUL{*/
+               /*margin-left: 228px;*/
+             /*}*/
+           /*}*/
+         /*}*/
+       /*}*/
+     /*}*/
+   /*}*/
+   /*@media only screen and (max-width: 1366px){*/
+     /*width:215px;*/
+     /*ul{*/
+       /*.firstLI{*/
+         /*.firstUL{*/
+           /*margin-left: 215px;*/
+           /*.secondLI{*/
+             /*.secondUL{*/
+               /*margin-left: 215px;*/
+             /*}*/
+           /*}*/
+         /*}*/
+       /*}*/
+     /*}*/
+   /*}*/
+   /*@media only screen and (max-width: 1280px){*/
+     /*width:202px;*/
+     /*ul{*/
+       /*.firstLI{*/
+         /*.firstUL{*/
+           /*margin-left: 202px;*/
+           /*.secondLI{*/
+             /*.secondUL{*/
+               /*margin-left: 202px;*/
+             /*}*/
+           /*}*/
+         /*}*/
+       /*}*/
+     /*}*/
+   /*}*/
+   /*@media only screen and (max-width: 1024px){*/
+     /*width:150px;*/
+     /*ul{*/
+       /*.firstLI{*/
+         /*.firstUL{*/
+           /*margin-left: 150px;*/
+           /*.secondLI{*/
+             /*.secondUL{*/
+               /*margin-left: 150px;*/
+             /*}*/
+           /*}*/
+         /*}*/
+       /*}*/
+     /*}*/
+   /*}*/
  }
 </style>

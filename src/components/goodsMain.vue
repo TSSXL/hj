@@ -63,7 +63,12 @@
           this.PriceStyle={
             textDecoration:'line-through'
           }
-           this. getProductsToken(this.$store.state.token || localStorage.getItem('token'))
+          if(this.$route.query.ID!==undefined)
+          {
+            this.getProductsToken(this.$store.state.token || localStorage.getItem('token'),this.$route.query.ID)
+          }else{
+            this.getProductsToken(this.$store.state.token || localStorage.getItem('token'),localStorage.getItem('jlID'))
+          }
         }
         else if(localStorage.getItem('token')!==null){
           this.$message("您还未登录")
@@ -71,7 +76,12 @@
         }
         else{
           this.$message("您还未登录")
-          this.getProducts()
+          if(this.$route.query.ID!==undefined)
+          {
+            this.getProducts(this.$route.query.ID)
+          }else{
+            this.getProducts(localStorage.getItem('jlID'))
+          }
         }
       },
       methods: {
@@ -79,13 +89,13 @@
         goods(ID,ClassID){
           this.$router.push({path:'/goodsInfo',query:{ID:ID,ClassID:ClassID}})
         },
-        getProducts(){
+        getProducts(ID){
           this.$http
             .get("/api/Shopping/ProTypeInfo",{
               params:{
                 PageIndex:1,
-                PageSize:10,
-                ID:localStorage.getItem('jlID'),
+                PageSize:20,
+                ID:ID,
                 PCorApp:'PC'
               }
             })
@@ -103,13 +113,13 @@
               }.bind(this)
             )
         },
-        getProductsToken(token){
+        getProductsToken(token,ID){
           this.$http
             .get("/api/Shopping/ProTypeInfo",{
               params:{
                 PageIndex:1,
-                PageSize:10,
-                ID:localStorage.getItem('jlID'),
+                PageSize:20,
+                ID:ID,
                 PCorApp:'PC',
                 Token:token
               }
@@ -223,7 +233,7 @@
       }
     .fl{
       width:50%;
-      margin-left: 21%;
+      margin-left: 25%;
       margin-top: 60px;
       font-size: 1.5em;
     }
@@ -281,6 +291,9 @@
    .content{
      .left{
        margin-left: 10%;
+       .fl{
+         margin-left: 3%;
+       }
      }
      .right{
        width:60%;
@@ -306,6 +319,11 @@
   }
   @media only screen and (max-width: 1366px){
     .content{
+      .left{
+        .fl{
+          margin-left: 18%;
+        }
+      }
       .right{
         margin-left: 0;
         ul{

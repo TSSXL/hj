@@ -472,8 +472,8 @@
           margin-top: 10%;
           margin-left: 5%;
           width:200px;
-          font-size: 1.5em;
-          background-color: #33647F;
+          font-size: 1.5em !important;
+          background-color: #33647F !important;
         }
       }
     }

@@ -9,7 +9,7 @@
             width="900"
             trigger="hover"
          >
-            <Jl-Component style="margin-left: 200px;"></Jl-Component>
+            <Jl-Component style="margin-left: 180px;"></Jl-Component>
             <el-button slot="reference">产品中心</el-button>
           </el-popover>
         </li>
@@ -22,8 +22,6 @@
           <img :src="item.Image" alt="" style="width:100%;height:100%;cursor: pointer" @click="goods(item.ProID,item.ClassID)">
         </el-carousel-item>
       </el-carousel>
-      <!--<span class="lxUs" @click="gotoLx">售后客服</span>-->
-      <img class="lxUs" src="../img/sh.svg" @click="gotoLx">
       <!--商品分类内容-->
       <div class="container" v-for="item in list">
         <p>{{item.Title}}</p>
@@ -207,15 +205,6 @@
        margin-left: 10%;
        position: relative;
      }
-   }
-   .lxUs{
-     position: absolute;
-     margin-top: -250px;
-     z-index: 999;
-     right:0;
-     cursor: pointer;
-     height:50px;
-     width:50px;
    }
    .container{
      margin-top: 20px;

@@ -1,12 +1,18 @@
 <template>
   <div id="app">
     <router-view/>
+    <img src="./img/shkf.png" class="shImg"  @click="gotoLx">
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  methods:{
+    gotoLx(){
+      this.$router.push({path:'/lx'})
+    },
+  }
 }
 </script>
 
@@ -14,6 +20,15 @@ export default {
   body{
     margin: 0;
     padding: 0;
+  }
+  .shImg{
+    position: fixed;
+    top:450px;
+    right:0;
+    cursor: pointer;
+    height:50px;
+    width:120px;
+    z-index: 999;
   }
   a{
     color:white;
