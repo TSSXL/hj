@@ -1,5 +1,6 @@
 <template>
     <div class="goodsMain">
+      <img src="../img/shkf.png" class="shImg"  @click="gotoLx">
       <Logo-Component></Logo-Component>
       <!--四个导航栏-->
       <ul class="nav">
@@ -85,6 +86,9 @@
         }
       },
       methods: {
+        gotoLx(){
+          this.$router.push({path:'/lx'})
+        },
         //点击进入商品详情
         goods(ID,ClassID){
           this.$router.push({path:'/goodsInfo',query:{ID:ID,ClassID:ClassID}})
@@ -182,6 +186,16 @@
 
 <style lang="scss" scoped>
 .goodsMain{
+  .shImg{
+    position: fixed;
+    top:450px;
+    right:0;
+    cursor: pointer;
+    height:35px;
+    width:120px;
+    z-index: 999;
+    object-fit:cover;
+  }
   .nav{
     list-style: none;
     height:100px;

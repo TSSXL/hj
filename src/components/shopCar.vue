@@ -1,5 +1,6 @@
 <template>
   <div class="mine">
+    <img src="../img/shkf.png" class="shImg"  @click="gotoLx">
     <Logo-Component></Logo-Component>
     <div class="content">
       <p>我的购物车</p>
@@ -62,6 +63,9 @@
       }
     },
     methods:{
+      gotoLx(){
+        this.$router.push({path:'/lx'})
+      },
       selectAll(val){
        this.choseAll=val
         if(val===true)
@@ -226,6 +230,16 @@
 <style lang="scss" scoped>
   .mine{
     width:100%;
+    .shImg{
+      position: fixed;
+      top:450px;
+      right:0;
+      cursor: pointer;
+      height:35px;
+      width:120px;
+      z-index: 999;
+      object-fit:cover;
+    }
     .content{
       display: inline-block;
       width:100%;

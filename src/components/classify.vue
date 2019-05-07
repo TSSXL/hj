@@ -1,8 +1,18 @@
 <template>
     <div class="classify">
+      <img src="../img/shkf.png" class="shImg"  @click="gotoLx">
       <Logo-Component></Logo-Component>
       <ul class="nav">
-        <li @click="gotoGoodsMain">产品中心</li>
+        <li class="firstLi" @click="gotoGoodsMain">
+          <el-popover
+            placement="bottom"
+            width="900"
+            trigger="hover"
+          >
+            <Jl-Component class="jlCon"></Jl-Component>
+            <el-button slot="reference">产品中心</el-button>
+          </el-popover>
+        </li>
         <li  v-for="(item,index) in navList" :key="item.ID" @click="handle(index,item.ID)" :style="colorStyle(index)">{{item.Name}}</li>
       </ul>
       <div class="classGoods">
@@ -23,6 +33,7 @@
 <script>
   import LogoComponent from './hd'
   import FootComponent from './foot'
+  import JlComponent from './jl'
     export default {
         name: "classify",
       data(){
@@ -34,7 +45,7 @@
             select:1,
           }
       },
-      components:{LogoComponent,FootComponent},
+      components:{LogoComponent,FootComponent,JlComponent},
       mounted(){
         this.select=parseInt(this.$route.query.id)
         //获取导航栏
@@ -58,6 +69,9 @@
         }
       },
       methods:{
+        gotoLx(){
+          this.$router.push({path:'/lx'})
+        },
         gotoGoodsMain(){
           this.$router.push({path:'/goodsMain'})
         },
@@ -158,6 +172,16 @@
 
 <style lang="scss" scoped>
 .classify{
+  .shImg{
+    position: fixed;
+    top:450px;
+    right:0;
+    cursor: pointer;
+    height:35px;
+    width:120px;
+    z-index: 999;
+    object-fit:cover;
+  }
   .nav{
     list-style: none;
     height:100px;
@@ -312,3 +336,4 @@
   }
 }
 </style>
+

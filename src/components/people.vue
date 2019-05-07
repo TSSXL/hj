@@ -1,5 +1,6 @@
 <template>
   <div class="mine">
+    <img src="../img/shkf.png" class="shImg"  @click="gotoLx">
     <Logo-Component></Logo-Component>
     <div class="content">
       <p>个人中心</p>
@@ -110,6 +111,9 @@
       this.action='http://hmc.nbxuanma.com/api/Login/UpdateForImage?type=1'
     },
     methods:{
+      gotoLx(){
+        this.$router.push({path:'/lx'})
+      },
       //修改个人信息
       editPerson(){
         if(this.imageUrl!=='')
@@ -254,6 +258,16 @@
 <style lang="scss" scoped>
   .mine{
     width:100%;
+    .shImg{
+      position: fixed;
+      top:450px;
+      right:0;
+      cursor: pointer;
+      height:35px;
+      width:120px;
+      z-index: 999;
+      object-fit:cover;
+    }
     .content{
       display: inline-block;
       width:100%;

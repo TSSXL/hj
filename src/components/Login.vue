@@ -61,7 +61,8 @@
             qs.stringify({
               Name: this.number,
               Password: md5(this.psd),
-              type:type
+              type:type,
+              PCorApp:"PC"
             })
           )
           .then(

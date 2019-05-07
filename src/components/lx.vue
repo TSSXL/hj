@@ -35,7 +35,7 @@
              Token:this.$store.state.token || localStorage.getItem('token'),
              ContactName:'',
              ContactWay: '',
-             Remarks: '请在此填写您的反馈内容',
+             Remarks: '',
              PCorApp: "PC"
            }
           }
@@ -56,7 +56,7 @@
       methods:{
         doit(){
           let Re= /^1([38]\d|5[0-35-9]|7[3678])\d{8}$/
-          if(this.form.ContactName==='' || this.form.ContactWay==='' || this.form.Remarks==='请在此填写您的反馈内容'){
+          if(this.form.ContactName==='' || this.form.ContactWay==='' || this.form.Remarks===''){
             this.$message("请输入完整的信息")
           }else if(!Re.test(this.form.ContactWay)){
           this.$message("请输入正确的手机号")
@@ -98,7 +98,7 @@
     }
     .mainContent{
       width:50%;
-      margin-left: 28%;
+      margin-left: 25.5%;
       padding-bottom: 60px;
       .item{
         width:100%;
@@ -127,22 +127,29 @@
       }
     }
     .btn{
-      width:200px;
-      background-color: red;
+      width:230px;
+      background-color: #33647F;
       height:40px;
       color:white;
       font-size: 1.5em;
       font-weight: bolder;
       cursor: pointer;
+      border-radius: 10px;
     }
   }
   @media only screen and (max-width: 1680px){
     .mainContent{
+      margin-left: 25% !important;
      .item{
        span{
          width:18% !important;
        }
      }
+    }
+  }
+  @media only screen and (max-width: 1366px){
+    .mainContent{
+      margin-left: 24.5% !important;
     }
   }
   @media only screen and (max-width: 1024px){

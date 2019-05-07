@@ -1,5 +1,6 @@
 <template>
     <div class="homeContainer">
+      <img src="../img/shkf.png" class="shImg"  @click="gotoLx">
     <Logo-Component></Logo-Component>
       <!--四个导航栏-->
       <ul class="nav">
@@ -9,7 +10,7 @@
             width="900"
             trigger="hover"
          >
-            <Jl-Component style="margin-left: 180px;"></Jl-Component>
+            <Jl-Component class="jlCon"></Jl-Component>
             <el-button slot="reference">产品中心</el-button>
           </el-popover>
         </li>
@@ -185,6 +186,16 @@
 
 <style lang="scss"  scoped>
  .homeContainer{
+   .shImg{
+     position: fixed;
+     top:450px;
+     right:0;
+     cursor: pointer;
+     height:35px;
+     width:120px;
+     z-index: 999;
+     object-fit:cover;
+   }
    .nav{
      list-style: none;
      height:100px;
@@ -358,3 +369,4 @@
    }
  }
 </style>
+

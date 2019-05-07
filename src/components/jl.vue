@@ -134,19 +134,17 @@
    }
    @media only screen and (max-width: 1680px){
    width:200px;
-     background-color: #D6D6D6;
      ul{
        .firstLI{
         a{
-          color:black;
+          color:white;
           font-weight: bolder;
         }
          .firstUL{
            margin-left: 200px;
-           background-color: #D6D6D6;
          li{
            a{
-             color:black;
+             color:white;
              font-weight: bolder;
            }
          }
