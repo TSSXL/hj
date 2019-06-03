@@ -3,7 +3,7 @@
       <ul>
         <li class="firstLI" v-for="(item,index) in list" :key="index" ><a href="#">{{item.PTFtName}}</a><img class="firstImg" src="../img/r.svg">
           <ul class="firstUL">
-            <li class="secondLI"  v-for="(j,index) in item.ProTypeSecond" :key="index" @click="gotoGoodsMain(j.ID)"><a>{{j.PTSdName}}</a>
+            <li class="secondLI"  v-for="(j,index) in item.ProTypeSecond" :key="index" @click="gotoGoodsMain(j.ID,item.PTFtName,j.PTSdName)"><a>{{j.PTSdName}}</a>
               <!--<ul class="secondUL">-->
                 <!--<li v-for="(i,index) in j.Content" :key="index"><a @click="goods(i.ID,i.ClassID)">{{i.Name}}</a></li>-->
               <!--</ul>-->
@@ -28,8 +28,8 @@
       },
       methods:{
         //点击进入产品中心
-        gotoGoodsMain(ID){
-          this.$router.push({path:'/goodsMain',query:{ID:ID}})
+        gotoGoodsMain(ID,firstName,lastName){
+          this.$router.push({path:'/goodsMain',query:{ID:ID,firstName:firstName,lastName:lastName}})
           this.$router.go(0)
         },
           getList(){

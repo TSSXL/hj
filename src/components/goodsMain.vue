@@ -12,6 +12,9 @@
        <span>产品分类</span>
        <img src="../img/dh.svg" @click="sm" v-if="isShow">
        <img src="../img/dhOne.svg" @click="op" v-else >
+       <div class="text" style="width:100%" v-show="firstName!==''">
+         {{firstName}}->{{lastName}}
+       </div>
        <div class="fl" :style="flStyle">
          <Jl-Component></Jl-Component>
        </div>
@@ -40,6 +43,8 @@
         name: "goodsMain",
       data(){
           return{
+            firstName:'',
+            lastName:'',
             prodList:[],
             flStyle:{},
             selectedOptions2: [],
@@ -66,6 +71,8 @@
           }
           if(this.$route.query.ID!==undefined)
           {
+            this.firstName=this.$route.query.firstName
+            this.lastName=this.$route.query.lastName
             this.getProductsToken(this.$store.state.token || localStorage.getItem('token'),this.$route.query.ID)
           }else{
             this.getProductsToken(this.$store.state.token || localStorage.getItem('token'),localStorage.getItem('jlID'))
@@ -229,6 +236,14 @@
       position: relative;
       background-color: #d6d6d6;
       padding-bottom: 60px;
+      .text{
+        width:60%;
+        margin-top: 30px;
+        height:40px;
+        font-size: 1.6em;
+        font-weight: bolder;
+        letter-spacing: 2px;
+      }
       span{
         font-size:26px;
         font-weight: bolder;
@@ -248,7 +263,7 @@
     .fl{
       width:50%;
       margin-left: 25%;
-      margin-top: 60px;
+      margin-top: 20px;
       font-size: 1.5em;
     }
     }

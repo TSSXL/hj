@@ -2,7 +2,7 @@
   <div class="mine">
     <img src="../img/shkf.png" class="shImg"  @click="gotoLx">
     <Logo-Component></Logo-Component>
-    <div class="content">
+    <div class="content" >
       <p>我的购物车</p>
       <ul>
         <li v-for="item in product">

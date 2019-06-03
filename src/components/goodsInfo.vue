@@ -27,6 +27,8 @@
             <img class="leftA" src="../img/left.png" @click="leftImage">
             <video class="littleVideo"    @click="playVideo">
               <source :src="videoUrl"  type="video/mp4" >
+              <source :src="videoUrl"  type="video/ogg" >
+              <source :src="videoUrl"  type="video/webm" >
             </video>
               <ul>
                   <li v-for="item in sImg">

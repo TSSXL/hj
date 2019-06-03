@@ -71,7 +71,7 @@
             .then(
               function (response) {
                 this.info=response.data.Result
-                this.info.UserImage='http://hmc.nbxuanma.com'+response.data.Result.UserImage
+                this.info.UserImage=response.data.Result.UserImage
                 this.$store.state.VipLv=response.data.Result.VipLv
                 localStorage.setItem('VipLv',response.data.Result.VipLv)
               }.bind(this)

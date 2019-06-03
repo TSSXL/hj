@@ -16,7 +16,7 @@ import store from './store/index'
 import axios from 'axios'
 Vue.prototype.$http = axios;
 
-axios.defaults.baseURL="http://hmc.nbxuanma.com"
+axios.defaults.baseURL="http://hmcapi.hijetcleaning.com/"
 
 Vue.use(ElementUI);
 Vue.use(VueVideoPlayer)

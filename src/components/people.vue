@@ -179,7 +179,7 @@
           .then(
             function (response) {
             this.info=response.data.Result
-            this.info.UserImage='http://hmc.nbxuanma.com'+response.data.Result.UserImage
+            this.info.UserImage=response.data.Result.UserImage
             }.bind(this)
           )
           .catch(
