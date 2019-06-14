@@ -51,7 +51,8 @@
         <div class="right">
           <p>{{goodInfo.Name}}</p>
           <p :style="PriceStyle">售价:￥{{goodInfo.Price}}</p>
-          <span>会员价:￥{{goodInfo.VipPrice}}</span>
+          <p style="color:#33647F;">会员价:￥{{goodInfo.VipPrice}} </p>
+          <p>库存:{{goodInfo.Inventory}}</p>
           <p class="sp">商品简介<br>{{goodInfo.Brif}}</p>
              <img src="../img/car.png" alt="" @click="addCar" class="carImg">
           <el-button class="btn"  type="danger" @click="addCar" style="color:white !important;">加入购物车</el-button>
@@ -151,7 +152,7 @@
            this.imageIndex=this.imageCount
            this.getGoodsImage(this.imageIndex,this.goodInfo.ProID)
          }else{
-           this.getGoodsImage(++this.imageIndex,this.goodInfo.ProID)
+           this.getGoodsImage(this.imageIndex++,this.goodInfo.ProID)
          }
         },
         //当商品有小视频的时候
@@ -354,7 +355,7 @@
             this.PageIndex=this.PageCount
             this.getTj(this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
           }else{
-            this.getTj(++this.PageIndex,this.$route.query.ClassID,this.$route.query.ID)
+            this.getTj(this.PageIndex++,this.$route.query.ClassID,this.$route.query.ID)
           }
 
         },
@@ -398,13 +399,13 @@
       }
     }
     .goodsMsg{
-      width:80%;
-      margin-left: 10%;
+      width:60%;
+      margin-left: 25%;
       display: flex;
       flex-direction: row;
       margin-top: 3%;
       .left{
-        width:25%;
+        width:30%;
         height:500px;
         margin-left: 10%;
         .video{
@@ -460,7 +461,7 @@
       }
       .right{
         width:50%;
-        margin-left: 5%;
+        margin-left: 10%;
         height:530px;
         p{
           font-size: 2.5em;
@@ -512,23 +513,19 @@
       p{
         font-size: 2em;
         font-weight: bolder;
-        text-align: left;
+        text-align: center;
         color:#33647F;
       }
       .lbBig{
         width:100%;
         height:140px;
+        display: flex;;
+        flex-direction: row;
         .z,.y{
-          position: absolute;
+          height:25px;
+          width:25px;
           cursor: pointer;
-        }
-        .z{
-          margin-left: -30%;
-          margin-top: 3.5%;
-        }
-        .y{
-          margin-top: -8%;
-          margin-left: 29.5%;
+          margin-top: 6%;
         }
         ul{
           list-style: none;
@@ -568,9 +565,9 @@
       margin-top: 3%;
       p{
         font-size: 2em;
+        color:#33647F;
         font-weight: bolder;
         text-align: center;
-        color:#919191;
       }
       img{
         height:400px;
@@ -579,6 +576,7 @@
     }
     @media only screen and (max-width: 1680px){
    .goodsMsg{
+     margin-left: 22%;
      .left{
        .lb{
         .leftA{
@@ -590,6 +588,7 @@
        }
      }
      .right{
+       margin-left: 18%;
        p{
          font-size: 2.5em;
        }
@@ -606,20 +605,19 @@
       .tjGoods{
         .lbBig{
           height:180px;
-          .y{
-            margin-top: -8.8%;
-          }
         }
       }
     }
     @media only screen and (max-width: 1440px){
       .goodsMsg{
+
         .left{
-          width:30%;
+          width:40%;
           margin-left: 4%;
         }
         .right{
           width:55%;
+          margin-left: 10%;
           p{
             font-size: 2.5em;
           }
@@ -636,13 +634,12 @@
         width:70%;
         margin-left: 15%;
         .lbBig{
-          .z{
-            margin-left: -35%;
-            margin-top: 4%;
-          }
-          .y{
-            margin-left: 33.5%;
-            margin-top: -10%;
+          ul{
+            li{
+              p{
+                font-size: 1em;
+              }
+            }
           }
         }
       }
@@ -651,22 +648,13 @@
         margin-left: 14%;
       }
     }
-    @media only screen and (max-width: 1366px){
- .tjGoods{
-   .lbBig{
-     .z{
-       margin-top: 4.5%;
-     }
-     .y{
-       margin-top: -10.5%;
-     }
-   }
- }
-    }
     @media only screen and (max-width: 1280px){
       .nav {
         li{
-          width:14%;
+          width:25%;
+        }
+        li:first-child{
+          margin-left: 0;
         }
       }
       .goodsMsg{

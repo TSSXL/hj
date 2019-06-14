@@ -285,7 +285,7 @@
           background:rgba(255,255,255,1);
           box-shadow:0px 1px 5px 0px rgba(43,43,43,0.14);
           p{
-            font-size: 1.8em;
+            font-size: 1.6em;
             text-align: left;
             margin-left: 5%;
             width:90%;
@@ -308,7 +308,7 @@
             display: inline-block;
             position: absolute;
             margin-top: -2.1%;
-            font-size: 1.9em;
+            font-size: 1.8em;
             font-weight: bolder;
             color:#33647F;
           }

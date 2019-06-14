@@ -107,8 +107,8 @@
 
     },
     beforeMount(){
-      this.actionUser='http://hmc.nbxuanma.com/api/Login/UpdateForImage?type=0'
-      this.action='http://hmc.nbxuanma.com/api/Login/UpdateForImage?type=1'
+      this.actionUser='http://hmcapi.hijetcleaning.com/api/Login/UpdateForImage?type=0'
+      this.action='http://hmcapi.hijetcleaning.com/api/Login/UpdateForImage?type=1'
     },
     methods:{
       gotoLx(){

@@ -242,11 +242,11 @@
          background:rgba(255,255,255,1);
          box-shadow:0px 1px 5px 0px rgba(43,43,43,0.14);
          p{
-           font-size: 2em;
+           font-size: 1.8em;
            text-align: left;
            margin-left: 10%;
            width:80%;
-           margin-top: 0;
+           margin-top: 5px;
            color:#393939;
          }
          .price{
@@ -263,7 +263,7 @@
          span{
            display: inline-block;
            position: absolute;
-           margin-top: -2.3%;
+           margin-top: -2.1%;
            font-size: 2.2em;
            font-weight: bolder;
           color:#33647F;
@@ -282,6 +282,10 @@
           }
           p{
             margin-top: 5px;
+            width:100%;
+           font-size: 1em;
+            font-weight: normal;
+            margin-left: 8%;
           }
           span{
             margin-top: -2.7%;
@@ -316,6 +320,9 @@
          li{
            p{
              font-size: 1.6em;
+           }
+           span{
+             margin-top: -2.5%;
            }
          }
        }

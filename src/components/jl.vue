@@ -84,7 +84,7 @@
        cursor: pointer;
        a{
          text-decoration: none;
-         font-size: 2em;
+         font-size: 1.8em;
          display: inline-block;
          width:80%;
        }

@@ -220,7 +220,7 @@
        background:rgba(255,255,255,1);
        box-shadow:0px 1px 5px 0px rgba(43,43,43,0.14);
        p{
-         font-size: 2em;
+         font-size: 1.8em;
          text-align: left;
          margin-left: 10%;
          width:80%;
@@ -239,7 +239,7 @@
        span{
          display: inline-block;
          position: absolute;
-         margin-top: -2.4%;
+         margin-top: -2.1%;
          font-size: 2.2em;
          font-weight: bolder;
          color:#33647F;
@@ -250,7 +250,7 @@
   @media only screen and (max-width: 1680px){
     .classGoods{
       ul{
-        width:100%;
+        width:97%;
         margin-left: 0;
         li{
           width:18%;
@@ -288,7 +288,9 @@
           height:280px;
           p{
             font-size: 1.8em;
-            margin-top: -5px;
+            margin-top: 3px;
+            margin-left: 4%;
+            width:100%;
           }
           span{
             font-size: 1.7em;
