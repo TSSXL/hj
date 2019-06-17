@@ -73,13 +73,14 @@
      margin: 0;
      padding: 0;
      border: 0;
+     position: relative;
      .firstLI{
        width:100%;
        height:40px;
        line-height: 40px;
        color:white;
        text-align: left;
-       position: relative;
+
        text-indent: 10px;
        cursor: pointer;
        a{
@@ -92,8 +93,7 @@
          height:20px;
          width:20px;
          position: absolute;
-         right:5px;
-         top:10px;
+         margin-top: 10px;
        }
        .firstUL{
          width:$width;
