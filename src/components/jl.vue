@@ -84,7 +84,7 @@
        cursor: pointer;
        a{
          text-decoration: none;
-         font-size: 1.8em;
+         font-size: 1.6em;
          display: inline-block;
          width:80%;
        }
@@ -101,7 +101,7 @@
          background-color: $bg;
           position: absolute;
          margin-left:200px;
-         margin-top: -42px;
+         top:0;
          display: none;
          li{
            width:100%;

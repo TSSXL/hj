@@ -75,7 +75,7 @@
       </div>
       <div class="xqGoods" :style="isShow===false?style:''">
         <p>商品详情</p>
-        <div style="width:100%;font-size: 2em" v-html="decodeURIComponent(goodInfo.Content)">
+        <div style="font-size: 2em;" v-html="decodeURIComponent(goodInfo.Content)">
         </div>
       </div>
       <Foot-Component></Foot-Component>
@@ -568,10 +568,6 @@
         color:#33647F;
         font-weight: bolder;
         text-align: center;
-      }
-      img{
-        height:400px;
-        margin-top: 1%;
       }
     }
     @media only screen and (max-width: 1680px){

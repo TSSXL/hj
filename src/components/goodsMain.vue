@@ -307,7 +307,7 @@
           span{
             display: inline-block;
             position: absolute;
-            margin-top: -2.1%;
+            margin-top: -1.8%;
             font-size: 1.8em;
             font-weight: bolder;
             color:#33647F;
